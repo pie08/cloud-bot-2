@@ -1,0 +1,38 @@
+[
+    {
+        "guild_id": 694994318468841542,
+        "default_channel": 887775093302894652,
+        "welcome_channel": 0,
+        "leave_channel": 0,
+        "welc": 1,
+        "welc_msg": 0,
+        "prefix": "%"
+    },
+    {
+        "guild_id": 900677759863513159,
+        "default_channel": 901116316818223154,
+        "welcome_channel": 0,
+        "leave_channel": 0,
+        "welc": 1,
+        "welc_msg": 0,
+        "prefix": "%"
+    },
+    {
+        "guild_id": 848204533133475860,
+        "default_channel": 848204534413000716,
+        "welcome_channel": 0,
+        "leave_channel": 0,
+        "welc": 1,
+        "welc_msg": 0,
+        "prefix": "%"
+    },
+    {
+        "guild_id": 742001124457971765,
+        "default_channel": 899182628597547028,
+        "welcome_channel": 0,
+        "leave_channel": 0,
+        "welc": 1,
+        "welc_msg": 0,
+        "prefix": "%"
+    }
+]
