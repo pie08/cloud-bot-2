@@ -1,0 +1,2 @@
+nextcord
+nextcord-ext-menus
