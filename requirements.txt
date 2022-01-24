@@ -1,4 +1,8 @@
-nextcord
-nextcord-ext-menus
-asyncio
-motor
+pip install nextcord
+pip install nextcord-ext-menus
+pip install asyncio
+pip install motor
+pip install "pymongo[srv]"
+pip install dadjokes
+pip install asyncpraw
+pip install Flask
