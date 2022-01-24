@@ -1,2 +1,4 @@
 nextcord
 nextcord-ext-menus
+asyncio
+motor
