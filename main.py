@@ -16,14 +16,17 @@ from motor import motor_asyncio
 
 print('Hello World')
 
-try: 
-    cluster = motor_asyncio.AsyncIOMotorClient("mongodb+srv://tyrus:Tyrus113@cluster0.qifea.mongodb.net/myFirstDatabase?retryWrites=true&w=majority") #here will be the link for your cluster
-    db = cluster["cloud_bot"] #write your db name here
-    collection = db["data"] #write the name of the collection present in the db where data will be stored
+try:
+    cluster = motor_asyncio.AsyncIOMotorClient(
+        "mongodb+srv://tyrus:Tyrus113@cluster0.qifea.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")  # here will be the link for your cluster
+    db = cluster["cloud_bot"]  # write your db name here
+    # write the name of the collection present in the db where data will be stored
+    collection = db["data"]
     print('Database Connected Successfully')
 except exception as e:
     print('Database Connection Failed')
     print(e)
+
 
 async def get_prefix(client, message):
     result = await collection.find_one({'_id': message.guild.id})
@@ -66,7 +69,7 @@ async def on_ready():
     all_users = 0
     for user in client.get_all_members():
         all_users += 1
-    await client.change_presence(status=nextcord.Status.idle, activity=nextcord.Activity(type = nextcord.ActivityType.watching, name = f'{all_users} users in {guilds} servers!'))
+    await client.change_presence(status=nextcord.Status.idle, activity=nextcord.Activity(type=nextcord.ActivityType.watching, name=f'{all_users} users in {guilds} servers!'))
     print(f'Logged In As {client.user}')
     giveaway_check.start()
     warn_reset.start()
@@ -88,14 +91,14 @@ async def on_guild_join(guild):
     result = await collection.find_one({'_id': guild.id})
     if not result:
         post = {
-                '_id': guild.id,
-                'default_channel': guild.text_channels[0].id,
-                'welcome_channel': 0,
-                'leave_channel': 0,
-                'welc': 1,
-                "welc_msg": 0,
-                'prefix': '%'
-            }
+            '_id': guild.id,
+            'default_channel': guild.text_channels[0].id,
+            'welcome_channel': 0,
+            'leave_channel': 0,
+            'welc': 1,
+            "welc_msg": 0,
+            'prefix': '%'
+        }
         await collection.insert_one(post)
 
 
@@ -266,14 +269,14 @@ async def on_message(message):
             pass
     if not result:
         post = {
-                '_id': message.guild.id,
-                'default_channel': message.guild.text_channels[0].id,
-                'welcome_channel': 0,
-                'leave_channel': 0,
-                'welc': 1,
-                "welc_msg": 0,
-                'prefix': '%'
-            }
+            '_id': message.guild.id,
+            'default_channel': message.guild.text_channels[0].id,
+            'welcome_channel': 0,
+            'leave_channel': 0,
+            'welc': 1,
+            "welc_msg": 0,
+            'prefix': '%'
+        }
         await collection.insert_one(post)
 
     if str(message.content) == client.user.mention:
@@ -347,9 +350,9 @@ async def on_member_join(member):
         pass
     if result['welc'] == 0:
         return
-    if result['welc_msg'] != 0 :
+    if result['welc_msg'] != 0:
         welc_msg = result['welc_msg'].replace(
-                        '{members}', str(member_count(guild.id)))
+            '{members}', str(member_count(guild.id)))
         welc_msg = welc_msg.replace('{member}', member.mention)
         welc_msg = welc_msg.replace('{guild}', guild.name)
     else:
@@ -386,7 +389,7 @@ async def on_member_remove(member):
         return
     if result['leave_channel'] != 0:
         channel = result['leave_channel']
-    
+
     leave_channel = client.get_channel(channel)
     join_date = member.joined_at
     roles = ''
@@ -416,6 +419,7 @@ async def slowmode(ctx, seconds: int, channel: nextcord.TextChannel = None):
     await channel.edit(slowmode_delay=seconds)
     await ctx.send(f"<:check_90:881380678938296410> | Set the slowmode delay in {channel.mention} to {seconds} seconds!")
 
+
 @slowmode.error
 async def _(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
@@ -423,14 +427,17 @@ async def _(ctx, error):
                             description=f'**Usage:** slowmode <seconds> <channel>\n**Example:** slowmode 5 {ctx.channel.mention}')
         await ctx.send(embed=em)
 
+
 @client.command()
 async def modnick(ctx, member: nextcord.Member):
     try:
-        gen = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        await member.edit(nick = 'Moderated Name / ' + gen)
+        gen = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                      for _ in range(10))
+        await member.edit(nick='Moderated Name / ' + gen)
         await ctx.send('<:check_90:881380678938296410> Name successfully changed')
     except:
         await ctx.send('')
+
 
 @client.command()
 async def kick(ctx, member: nextcord.Member, *, reason="No reason provided"):
@@ -816,7 +823,8 @@ class HelpButtonMenu(menus.ButtonMenu):
                      value=f'*{client.user.name} would love to be in your server you can invite him [here](https://nextcord.com/api/oauth2/authorize?client_id=881336046778986518&permissions=8&scope=bot%20applications.commands)*\n*If you need help with me you can join my support [server](https://nextcord.gg/72udgVqEkf)*', inline=False)
         em.add_field(
             name='❔ Info', value=f'*To access the commands use the button at the bottom*\nDeveloped by **{dev}**', inline=False)
-        em.add_field(name='🔗 Useful Links', value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+        em.add_field(name='🔗 Useful Links',
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         return await channel.send(embed=em, view=self)
 
     @nextcord.ui.button(label="🍂 General", style=nextcord.ButtonStyle.primary)
@@ -829,7 +837,8 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label="⚙ Moderation", style=nextcord.ButtonStyle.primary)
     async def on_mod_click(self, button, interaction):
-        em = nextcord.Embed(title='⚙ Mod commands', description=moddes, color=nextcord.Color.blue())
+        em = nextcord.Embed(title='⚙ Mod commands',
+                            description=moddes, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
                      value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`')
         await self.message.edit(embed=em)
@@ -852,7 +861,7 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label='🔧 Configuration', style=nextcord.ButtonStyle.primary)
     async def on_config_click(self, button, interaction):
-        em=nextcord.Embed(
+        em = nextcord.Embed(
             title='🔧 Configuration Commands',
             description=configDes,
             color=nextcord.Color.blue()
@@ -860,7 +869,7 @@ class HelpButtonMenu(menus.ButtonMenu):
         em.add_field(
             name='💼 How To Get Help',
             value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`'
-            )
+        )
         await self.message.edit(embed=em)
 
     @nextcord.ui.button(label="🏠 Go Home", style=nextcord.ButtonStyle.danger)
@@ -873,7 +882,8 @@ class HelpButtonMenu(menus.ButtonMenu):
                      value=f'*{client.user.name} would love to be in your server you can invite him [here](https://nextcord.com/api/oauth2/authorize?client_id=881336046778986518&permissions=8&scope=bot%20applications.commands)*\n*If you need help with me you can join my support [server](https://nextcord.gg/72udgVqEkf)*', inline=False)
         em.add_field(
             name='❔ Info', value=f'*To access the commands use the button at the bottom*\nDeveloped by **{dev}**', inline=False)
-        em.add_field(name='🔗 Useful Links', value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+        em.add_field(name='🔗 Useful Links',
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await self.message.edit(embed=em)
 
 
@@ -954,6 +964,7 @@ async def giveaway_check():
     with open('giveaway_data.json', 'w') as f:
         json.dump(data, f, indent=4)
 
+
 @tasks.loop(seconds=900)
 async def status_update():
     guilds = 0
@@ -962,7 +973,8 @@ async def status_update():
     all_users = 0
     for user in client.get_all_members():
         all_users += 1
-    await client.change_presence(status=nextcord.Status.idle, activity=nextcord.Activity(type = nextcord.ActivityType.watching, name = f'{all_users} users in {guilds} servers!'))
+    await client.change_presence(status=nextcord.Status.idle, activity=nextcord.Activity(type=nextcord.ActivityType.watching, name=f'{all_users} users in {guilds} servers!'))
+
 
 @client.event
 async def on_command_error(ctx, error):
