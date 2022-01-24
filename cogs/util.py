@@ -148,7 +148,7 @@ class Util(commands.Cog):
     @commands.command()
     async def warns(self, ctx, member: nextcord.Member = None):
         member = member or ctx.author
-        with open('C:\\Users\\Tyrus\\OneDrive\\Documents\\GitHub\\cloud-bot\\warns.json') as f:
+        with open('warns.json') as f:
             data = json.load(f)
             for d in data:
                 if d['user_id'] == member.id:
