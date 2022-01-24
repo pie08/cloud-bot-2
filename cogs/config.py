@@ -12,9 +12,11 @@ import motor
 from motor import motor_asyncio
 
 try:
-    cluster = motor_asyncio.AsyncIOMotorClient("mongodb+srv://tyrus:Tyrus113@cluster0.qifea.mongodb.net/myFirstDatabase?retryWrites=true&w=majority") #here will be the link for your cluster
-    db = cluster["cloud_bot"] #write your db name here
-    collection = db["data"] #write the name of the collection present in the db where data will be stored
+    cluster = motor_asyncio.AsyncIOMotorClient(
+        "mongodb+srv://tyrus:Tyrus113@cluster0.qifea.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")  # here will be the link for your cluster
+    db = cluster["cloud_bot"]  # write your db name here
+    # write the name of the collection present in the db where data will be stored
+    collection = db["data"]
     print('Database Connected Successfully - config.py')
 except:
     print('Database Connection Failed - config.py')
@@ -48,10 +50,11 @@ class Config(commands.Cog):
         if not ctx.author.guild_permissions.manage_messages:
             await ctx.send('This command requires `manage_messages` permission')
             return
-        
+
         guild = ctx.guild
         defRole = ctx.guild.default_role
-        channel = nextcord.utils.get(guild.text_channels, name='cloud-announcments')
+        channel = nextcord.utils.get(
+            guild.text_channels, name='cloud-announcments')
 
         if not channel:
             channel = await guild.create_text_channel('cloud-announcments')
@@ -104,7 +107,7 @@ class Config(commands.Cog):
             await ctx.send('This command requires `administrator` permmisions')
             return
         channel = channel or ctx.channel
-        await collection.update_one({'_id': ctx.guild.id}, {'$set':{'default_channel': channel.id}})
+        await collection.update_one({'_id': ctx.guild.id}, {'$set': {'default_channel': channel.id}})
         await ctx.send(f'<:check_90:881380678938296410> | Default channel set to {channel.name}')
 
     @commands.command()
@@ -225,25 +228,25 @@ class Config(commands.Cog):
 
         em = nextcord.Embed(color=nextcord.Color.blue())
         em.add_field(name='Default Channel',
-                        value=default_channel.mention, inline=False)
+                     value=default_channel.mention, inline=False)
         em.add_field(name='Welcome Channel',
-                        value=welc_channel.mention, inline=False)
+                     value=welc_channel.mention, inline=False)
         em.add_field(name='Leave Channel',
-                        value=leave_channel.mention, inline=False)
+                     value=leave_channel.mention, inline=False)
         em.add_field(name='Welcome Status',
-                        value=welc, inline=False)
+                     value=welc, inline=False)
         em.add_field(name='Welcome Message',
-                        value=welc_msg, inline=False)
+                     value=welc_msg, inline=False)
         em.add_field(name='Welcome Roles',
-                        value=roles, inline=False)
+                     value=roles, inline=False)
         em.add_field(name='Welcome DM',
-                        value=welc_dm, inline=False)
+                     value=welc_dm, inline=False)
         em.add_field(
             name='🔗 Useful Links', value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         em.set_author(name='Welcome Status')
         em.set_thumbnail(url=self.client.user.avatar.url)
         em.set_footer(icon_url=ctx.author.avatar.url,
-            text=f'Requested by {ctx.author.name}')
+                      text=f'Requested by {ctx.author.name}')
         await ctx.send(embed=em)
 
     @commands.command()
@@ -319,7 +322,7 @@ class Config(commands.Cog):
         em.add_field(name='🔗 Useful Links',
                      value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await ctx.send(embed=em)
-        
+
     @commands.command()
     async def block_links(self, ctx):
         if not ctx.author.guild_permissions.administrator:
@@ -437,6 +440,7 @@ class Config(commands.Cog):
         em.set_author(name='Config Overview')
         em.timestamp = datetime.utcnow()
         await ctx.send(embed=em)
+
 
 def setup(client):
     client.add_cog(Config(client))
