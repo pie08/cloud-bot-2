@@ -62,7 +62,7 @@ class Commands(commands.Cog):
             all_users += 1
         result = await collection.find_one({'_id': ctx.guild.id})
         prefix = result['prefix']
-        with open('C:\\Users\\Tyrus\\OneDrive\\Desktop\\peepo bot\\bot_data.json') as f:
+        with open('bot_data') as f:
             data = json.load(f)
             bot_version = data['bot_version']
         em = nextcord.Embed(
@@ -114,14 +114,14 @@ class Commands(commands.Cog):
     @commands.command()
     async def update_version(self, ctx, version):
         if ctx.author.id == 568604697855000624:
-            with open('C:\\Users\\Tyrus\\OneDrive\\Desktop\\peepo bot\\bot_data.json') as f:
+            with open('bot_data.json') as f:
                 data = json.load(f)
                 prev_version = data['bot_version']
                 data['bot_version'] = version
             await ctx.send(f'`Are you sure you want to change my version to {version}`')
             msg = await self.client.wait_for('message', timeout=10)
             if str(msg.content) == 'y':
-                with open('C:\\Users\\Tyrus\\OneDrive\\Desktop\\peepo bot\\bot_data.json', 'w') as f:
+                with open('bot_data.json', 'w') as f:
                     json.dump(data, f)
                 await ctx.send(f'`Bot version changed to : {version} | Previous version : {prev_version}`')
             else:
