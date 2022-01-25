@@ -62,7 +62,7 @@ class Commands(commands.Cog):
             all_users += 1
         result = await collection.find_one({'_id': ctx.guild.id})
         prefix = result['prefix']
-        with open('bot_data') as f:
+        with open('bot_data.json') as f:
             data = json.load(f)
             bot_version = data['bot_version']
         em = nextcord.Embed(
