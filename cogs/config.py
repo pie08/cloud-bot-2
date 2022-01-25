@@ -242,7 +242,7 @@ class Config(commands.Cog):
         em.add_field(name='Welcome DM',
                      value=welc_dm, inline=False)
         em.add_field(
-            name='🔗 Useful Links', value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+            name='🔗 Useful Links', value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         em.set_author(name='Welcome Status')
         em.set_thumbnail(url=self.client.user.avatar.url)
         em.set_footer(icon_url=ctx.author.avatar.url,
@@ -320,7 +320,7 @@ class Config(commands.Cog):
         em = nextcord.Embed(title='Bot config',
                             description=botdes, color=nextcord.Color.blue())
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await ctx.send(embed=em)
 
     @commands.command()
@@ -436,7 +436,7 @@ class Config(commands.Cog):
         em.add_field(name='Links Blocked?', value=block)
         em.add_field(name='Welcome Status', value=welc, inline=False)
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         em.set_author(name='Config Overview')
         em.timestamp = datetime.utcnow()
         await ctx.send(embed=em)

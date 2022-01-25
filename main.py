@@ -819,11 +819,11 @@ class HelpButtonMenu(menus.ButtonMenu):
             description='🍂 **General** - *General commands*\n⚙ **Moderation** - *Moderation commands*\n**🔨 Utility** - *Utility commands*\n**😎 Fun** - *Fun commands*', color=nextcord.Color.blue())
         em.set_author(name='Command Overview')
         em.add_field(name='👑 Invite Me To Your Server',
-                     value=f'*{client.user.name} would love to be in your server you can invite him [here](https://nextcord.com/api/oauth2/authorize?client_id=881336046778986518&permissions=8&scope=bot%20applications.commands)*\n*If you need help with me you can join my support [server](https://nextcord.gg/72udgVqEkf)*', inline=False)
+                     value=f'*{client.user.name} would love to be in your server you can invite him [here](https://discord.com/api/oauth2/authorize?client_id=881336046778986518&permissions=8&scope=bot)*\n*If you need help with me you can join my support [server](https://discord.gg/72udgVqEkf)*', inline=False)
         em.add_field(
             name='❔ Info', value=f'*To access the commands use the button at the bottom*\nDeveloped by **{dev}**', inline=False)
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         return await channel.send(embed=em, view=self)
 
     @nextcord.ui.button(label="🍂 General", style=nextcord.ButtonStyle.primary)
@@ -878,11 +878,11 @@ class HelpButtonMenu(menus.ButtonMenu):
             description='🍂 **General** - *General commands*\n⚙ **Moderation** - *Moderation commands*\n**🔨 Utility** - *Utility commands*\n**😎 Fun** - *Fun commands*', color=nextcord.Color.blue())
         em.set_author(name='Command Overview')
         em.add_field(name='👑 Invite Me To Your Server',
-                     value=f'*{client.user.name} would love to be in your server you can invite him [here](https://nextcord.com/api/oauth2/authorize?client_id=881336046778986518&permissions=8&scope=bot%20applications.commands)*\n*If you need help with me you can join my support [server](https://nextcord.gg/72udgVqEkf)*', inline=False)
+                     value=f'*{client.user.name} would love to be in your server you can invite him [here](https://discord.com/api/oauth2/authorize?client_id=881336046778986518&permissions=8&scope=bot)*\n*If you need help with me you can join my support [server](https://discord.gg/72udgVqEkf)*', inline=False)
         em.add_field(
             name='❔ Info', value=f'*To access the commands use the button at the bottom*\nDeveloped by **{dev}**', inline=False)
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await self.message.edit(embed=em)
 
 

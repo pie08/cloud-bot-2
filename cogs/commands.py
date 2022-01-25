@@ -76,7 +76,7 @@ class Commands(commands.Cog):
         em.add_field(name='OS', value='`Windows 10`')
         em.add_field(name='Bot Version', value=f'`{bot_version}`')
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://nextcord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)', inline=False)
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)', inline=False)
         em.set_footer(icon_url=ctx.author.avatar.url,
                       text=f'Requested by {ctx.author.name}')
         em.set_thumbnail(url=self.client.user.avatar.url)
@@ -130,7 +130,7 @@ class Commands(commands.Cog):
     @commands.command()
     async def support(self, ctx):
         em = nextcord.Embed(
-            description='Heres my support server! \nhttps://nextcord.gg/72udgVqEkf', color=nextcord.Color.blue())
+            description='Heres my support server! \nhttps://discord.gg/72udgVqEkf', color=nextcord.Color.blue())
         await ctx.author.send(embed=em)
 
     @commands.command()
