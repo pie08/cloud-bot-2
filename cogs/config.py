@@ -130,8 +130,8 @@ class Config(commands.Cog):
         await collection.update_one({'_id': ctx.guild.id}, {'$set': {'welc': 1}})
         await ctx.send('<:check_90:881380678938296410> | Welcomes set to on')
 
-    @commands.command(name='msgset', description='#Customize the message I send to new users who join the server')
-    async def msgset(self, ctx, *, text):
+    @commands.command(name='welcmsg', description='#Customize the message I send to new users who join the server')
+    async def welcmsg(self, ctx, *, text):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -141,7 +141,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> | Something went wrong')
 
-    @msgset.error
+    @welcmsg.error
     async def _(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             count = 0
