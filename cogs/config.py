@@ -84,15 +84,6 @@ class Config(commands.Cog):
         await ctx.send('<:check_90:881380678938296410> I have created a channel to recieve updates')
 
     @commands.command()
-    async def config(self, ctx):
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send('This commands requires `administrator` permissions')
-            return
-        em = nextcord.Embed(
-            title='Bot Config', description='`Welc` - *Configure welcome settings*\n`Bot` - *Configure bot settings*\n', color=nextcord.Color.blue())
-        await ctx.send(embed=em)
-
-    @commands.command()
     async def welc(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
