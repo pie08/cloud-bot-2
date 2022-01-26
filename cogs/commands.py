@@ -146,7 +146,11 @@ class Commands(commands.Cog):
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
             return
 
-        version_ask = await ctx.author.send('Please choose a version to update to (type nill to terminate)')
+        with open('bot_data.json') as f:
+            data = json.load(f)
+            cur_version = data['bot_version']
+
+        version_ask = await ctx.author.send(f'Please choose a version to update to, current version {cur_version} (type nill to terminate)')
         try:
             version = await self.client.wait_for(
                 'message',
