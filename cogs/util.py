@@ -25,7 +25,10 @@ class Util(commands.Cog):
         self.client = client
 
     @commands.command()
-    async def cancel_giv(self, ctx, msg_id):
+    async def cancel_giv(self, ctx, msg_id = 0):
+        if msg_id == 0:
+            await ctx.send('<:xmark:884407516363108412> Please include the giveaways id as an argument')
+            return
         with open('giveaway_data.json') as f:
             data = json.load(f)
             counter = 0
