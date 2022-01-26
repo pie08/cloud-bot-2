@@ -1,5 +1,7 @@
 from logging import debug, exception
 from operator import mod
+from discord import message
+from itsdangerous import exc
 import nextcord
 from nextcord.ext import commands, tasks, menus
 from nextcord.ui import view
@@ -43,22 +45,6 @@ client.remove_command("help")
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
-
-
-@client.command()
-async def reload(ctx):
-    user = ctx.author
-    if user.id == 568604697855000624:
-        try:
-            for filename in os.listdir('./cogs'):
-                if filename.endswith('.py'):
-                    client.unload_extension(f'cogs.{filename[:-3]}')
-                    client.load_extension(f'cogs.{filename[:-3]}')
-            await ctx.send('`Successfully reloaded all extensions`')
-        except Exception as e:
-            await ctx.send(f'`Error reloading extension {filename}`')
-            print(e)
-
 
 @client.event
 async def on_ready():
@@ -118,7 +104,7 @@ def member_count(id):
     return count
 
 
-@client.command()
+@client.command(name='giveaway', description='%Start a giveaway!')
 async def giveaway(ctx):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permissions')
@@ -409,7 +395,7 @@ async def on_member_remove(member):
 
 
 # MOD COMMANDS
-@client.command()
+@client.command(name='slowmode', description='&Set a slowmode in a channel')
 async def slowmode(ctx, seconds: int, channel: nextcord.TextChannel = None):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permission')
@@ -427,7 +413,7 @@ async def _(ctx, error):
         await ctx.send(embed=em)
 
 
-@client.command()
+@client.command(name='modnick', description='&Change a users nickname to a moderated one')
 async def modnick(ctx, member: nextcord.Member):
     try:
         gen = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -438,7 +424,7 @@ async def modnick(ctx, member: nextcord.Member):
         await ctx.send('')
 
 
-@client.command()
+@client.command(name='kick', description='&Kick a member from the server')
 async def kick(ctx, member: nextcord.Member, *, reason="No reason provided"):
     if not ctx.author.guild_permissions.kick_members:
         await ctx.send('This command requires `kick_members` permission')
@@ -455,7 +441,7 @@ async def kick(ctx, member: nextcord.Member, *, reason="No reason provided"):
     await member.kick(reason=reason)
 
 
-@client.command()
+@client.command(name='ban', description='&Ban a user from the server')
 async def ban(ctx, member: nextcord.Member, *, reason="No reason provided"):
     if not ctx.author.guild_permissions.ban_members:
         await ctx.send('This command requires `ban_members` permission')
@@ -472,7 +458,7 @@ async def ban(ctx, member: nextcord.Member, *, reason="No reason provided"):
     await member.ban(reason=reason)
 
 
-@client.command()
+@client.command(name='softban', description='&Ban a member for a period of time')
 async def softban(ctx, member: nextcord.Member, time_input='1',  *, reason='No reason provided'):
     if not ctx.author.guild_permissions.ban_members:
         await ctx.send('This command requires `ban_members` permission')
@@ -506,7 +492,7 @@ async def softban(ctx, member: nextcord.Member, time_input='1',  *, reason='No r
     await member.unban(reason='Softban ended')
 
 
-@client.command()
+@client.command(name='warn', description='&Warn a member')
 async def warn(ctx, member: nextcord.Member, *, reason='No reason provided'):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permission')
@@ -586,7 +572,7 @@ async def warn(ctx, member: nextcord.Member, *, reason='No reason provided'):
         await ctx.send(embed=em)
 
 
-@client.command()
+@client.command(name='removewarn', description='&Remove a warning from a member')
 async def removewarn(ctx, member: nextcord.Member, ammount='1'):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permission')
@@ -618,7 +604,7 @@ async def removewarn(ctx, member: nextcord.Member, ammount='1'):
         json.dump(data, f, indent=4)
 
 
-@client.command()
+@client.command(name='clear', description='&Clears an ammount of messages from a channel')
 async def clear(ctx, amount=2):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permission')
@@ -627,7 +613,7 @@ async def clear(ctx, amount=2):
     await ctx.send(f'<:check_90:881380678938296410> | Cleared {amount} messages')
 
 
-@client.command()
+@client.command(name='mute', description='&Mute a member')
 async def mute(ctx, member: nextcord.Member, mute_time='900', *, reason='No reason provided'):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permission')
@@ -669,7 +655,7 @@ async def mute(ctx, member: nextcord.Member, mute_time='900', *, reason='No reas
             await ctx.send(embed=em)
 
 
-@client.command()
+@client.command(name='unmute', description='&Unmute a member')
 async def unmute(ctx, member: nextcord.Member):
     if not ctx.author.guild_permissions.manage_messages:
         await ctx.send('This command requires `manage_messages` permission')
@@ -685,7 +671,7 @@ async def unmute(ctx, member: nextcord.Member):
     await ctx.send(f'User `{member}` is already unmuted.')
 
 
-@client.command()
+@client.command(name='lock', description='&Lock a channel')
 async def lock(ctx, channel: nextcord.TextChannel = None):
     if not ctx.author.guild_permissions.manage_channels:
         await ctx.send('This command requires `manage_channels` permission')
@@ -702,7 +688,7 @@ async def lock(ctx, channel: nextcord.TextChannel = None):
     await channel.send(f'Channel locked by {ctx.author.mention} 🔒')
 
 
-@client.command()
+@client.command(name='unlock', description='&Unlock a channel')
 async def unlock(ctx, channel: nextcord.TextChannel = None):
     if not ctx.author.guild_permissions.manage_channels:
         await ctx.send('This command requires `manage_channels` permission')
@@ -719,7 +705,7 @@ async def unlock(ctx, channel: nextcord.TextChannel = None):
     await channel.send(f'Channel unlocked by {ctx.author.mention} 🔓')
 
 
-@client.command()
+@client.command(name='lockdown', description='&Lockdown the server')
 async def lockdown(ctx, *, reason='No reason provided'):
     if not ctx.author.guild_permissions.administrator:
         await ctx.send('This command requires `administrator` permission')
@@ -736,7 +722,7 @@ async def lockdown(ctx, *, reason='No reason provided'):
     await ctx.send(embed=em)
 
 
-@client.command()
+@client.command(name='lockdownend', description='&End the lockdown')
 async def lockdownend(ctx):
     if not ctx.author.guild_permissions.administrator:
         await ctx.send('This command requires `administrator` permission')
@@ -751,62 +737,6 @@ async def lockdownend(ctx):
     em.set_footer(icon_url=ctx.author.avatar.url,
                   text=f'Issued by {ctx.author.name}')
     await ctx.send(embed=em)
-
-
-moddes = ''
-moddes += '`Ban` - *Bans a member from the server*\n'
-moddes += '`Softban` - *Bans a member and then unbans them after a period of time*\n'
-moddes += '`Kick` - *Kicks a member from the server*\n'
-moddes += '`Clear` - *Clears a given ammount of messages from a channel*\n'
-moddes += '`Mute` - *Mutes a member for some ammount of time*\n'
-moddes += '`Unmute` - *Unmutes a member*\n'
-moddes += '`Warn` - *Warn a member*\n'
-moddes += '`Removewarn` - *Remove a warning from a member*\n'
-moddes += '`Lock` - *Lock a channel*\n'
-moddes += '`Unlock` - *Unlock a channel*\n'
-moddes += '`Lockdown` - *Lockdown the server*\n'
-moddes += '`Lockdownend` - *End the lockdown*\n'
-moddes += '`Slowmode` - *Set a slowmode to a channel*\n'
-moddes += '`Modnick` - *Change a users nickname to a preset moderated one*\n'
-
-helpdes = ''
-helpdes += '`Fiverr` - *Buy a custom discord bot on fiverr from my dev!*\n'
-helpdes += '`Ping` - *Check how fast Im running!* \n'
-helpdes += '`Info` - *General info about me*\n'
-helpdes += '`Support` - *Join my support server*\n'
-helpdes += '`Invite` - *Invite me to your server*\n'
-helpdes += '`Feedback` - *Submit feedback/suggest features to my dev*\n'
-helpdes += '`Updates` - *Recieve the lastest updates from cloud bot in a channel*\n'
-helpdes += '`Reload` - *Reload extensions* **[Dev Only]**\n'
-
-utildes = ''
-utildes += '`Warns` - *Check how many warns a user has*\n'
-utildes += '`Setafk` - *Let everybody know that your currently afk!*\n'
-utildes += '`Reminder` - *Set a reminder and I will remind you after some time*\n'
-utildes += '`Serverinfo` - *Some basic information about your server!* \n'
-utildes += '`Whois` - *Get some info about a member* \n'
-utildes += '`Giveaway` - *Follow the steps to create a giveaway*\n'  # main.py
-utildes += '`cancel_giv` - *Cancel an ongoing giveaway*\n'
-
-fundes = ''
-fundes += '`Meme` - *Sends a random meme*\n'
-fundes += '`Cat` - *Sends a pic of a cute cat*\n'
-fundes += '`Doggy` - *Sends a pic of a cute dog*\n'
-fundes += '`Pug` - *Sends a pic of a pug*\n'
-fundes += '`Cute` - *Sends a pic from r/aww*\n'
-fundes += '`Dadjoke` - *Sends a dadjoke*\n'
-fundes += '`Membercount` - *This should be very obvious*\n'
-fundes += '`Avatar` - *Get a closer look at somebody profile picture!*\n'
-fundes += '`Nick` - *Change your nickname*\n'
-fundes += '`Roll` - *Role the dice!*\n'
-fundes += '`Roulet` - *Take your chances at a classic game with a twist!*\n'
-fundes += '`rps` - *Play rock paper scissors with me*\n'
-fundes += '`Flip` - *Heads or tails!*\n'
-fundes += '`Rickroll` - *I bet you have a good guess*\n'
-
-configDes = ''
-configDes += '`Welc` - *Configure welcome settings*\n'
-configDes += '`Bot` - *Configure bot settings*\n'
 
 
 class HelpButtonMenu(menus.ButtonMenu):
@@ -827,42 +757,77 @@ class HelpButtonMenu(menus.ButtonMenu):
         return await channel.send(embed=em, view=self)
 
     @nextcord.ui.button(label="🍂 General", style=nextcord.ButtonStyle.primary)
-    async def on_gen_clieck(self, button, interaction):
+    async def on_gen_click(self, button, interaction):
+        helpcmds=''
+        for cmd in client.commands:
+            try:
+                if cmd.description[0] == '$':
+                    helpcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(title='⚙ Commands',
-                            description=helpdes, color=nextcord.Color.blue())
+                            description=helpcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
                      value='*If you need help on a command you can type my prefix and then* \n`help <name of command>`', inline=False)
         await self.message.edit(embed=em)
 
     @nextcord.ui.button(label="⚙ Moderation", style=nextcord.ButtonStyle.primary)
     async def on_mod_click(self, button, interaction):
+        modcmds=''
+        for cmd in client.commands:
+            try:
+                if cmd.description[0] == '&':
+                    modcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(title='⚙ Mod commands',
-                            description=moddes, color=nextcord.Color.blue())
+                            description=modcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
                      value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`')
         await self.message.edit(embed=em)
 
     @nextcord.ui.button(label="🔨 Utility", style=nextcord.ButtonStyle.primary)
     async def on_util_click(self, button, interaction):
+        utilcmds=''
+        for cmd in client.commands:
+            try:
+                if cmd.description[0] == '%':
+                    utilcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(title='🔨 Utility commands',
-                            description=utildes, color=nextcord.Color.blue())
+                            description=utilcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
                      value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`')
         await self.message.edit(embed=em)
 
     @nextcord.ui.button(label="😎 Fun", style=nextcord.ButtonStyle.primary)
     async def on_fun_click(self, button, interaction):
+        funcmds=''
+        for cmd in client.commands:
+            try:
+                if cmd.description[0] == '!':
+                    funcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(title='😎 Fun commands',
-                            description=fundes, color=nextcord.Color.blue())
+                            description=funcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
                      value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`')
         await self.message.edit(embed=em)
 
     @nextcord.ui.button(label='🔧 Configuration', style=nextcord.ButtonStyle.primary)
     async def on_config_click(self, button, interaction):
+        configcmds=''
+        for cmd in client.commands:
+            try:
+                if cmd.description[0] == '^':
+                    configcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(
             title='🔧 Configuration Commands',
-            description=configDes,
+            description=configcmds,
             color=nextcord.Color.blue()
         )
         em.add_field(
@@ -886,7 +851,7 @@ class HelpButtonMenu(menus.ButtonMenu):
         await self.message.edit(embed=em)
 
 
-@client.command()
+@client.command(name='help', description='$Get help with my commands')
 async def help(ctx, command=None):
     if command != None:
         for func in client.commands:

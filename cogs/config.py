@@ -22,30 +22,12 @@ except:
     print('Database Connection Failed - config.py')
 
 
-welcdes = '`Defset` - *Set a channel to the default channel for your server*\n`Welcomeset <channel>` - *Set a channel to recieve welcomes*\n`Leaveset <channel>` - *Set a channel to recieve leaves*\n`On` - *Turn welcomes on*\n`Off` - *Turn welcomes off*\n`Msgset` - *Customize the message I send when somebody joins*\n`Msgreset` - *Return to the default welcome message*\n`Welcomestats` - *Display important information about your welcome status*\n'
-welcdes += '`Addrole` - *Add a role to be given to new member that join*\n'
-welcdes += '`Removerole` - *Remove a role from your on join add role event*\n'
-welcdes += '`Welcomedm` - *Configure the dm i sent to a user that joins this guild*\n'
-welcdes += '`Welcomedm_remove` - *Remove your previously set welcome dm*\n'
-
-botdes = ''
-botdes += '`block_invites` - *Block messages that contain discord invites*\n'
-botdes += '`unblock_invites` - *Allow discord invites to be sent*\n'
-botdes += '`block_links` - *Blocks all links from chat*\n'
-botdes += '`unblock_links` - *Unblocks all links from chat*\n'
-botdes += '`Updates` - *Recieve the latest updates from cloud bot in a channel*\n'
-botdes += '`Spamchannel` - *Users will not be muted for spam in this channel*\n'
-botdes += '`Delspamchannel` - *Users will be muted for spam in this channel*\n'
-botdes += '`Prefix` - *Change my prefix for your server*\n'
-botdes += '`Configstats` - *Configuration settings overview*\n'
-
-
 class Config(commands.Cog):
 
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(name='updates', description='.Recieve updates for Cloud Bot in a created channel')
     async def updates(self, ctx):
         if not ctx.author.guild_permissions.manage_messages:
             await ctx.send('This command requires `manage_messages` permission')
@@ -83,16 +65,23 @@ class Config(commands.Cog):
         await btnMenu().start(ctx)
         await ctx.send('<:check_90:881380678938296410> I have created a channel to recieve updates')
 
-    @commands.command()
+    @commands.command(name='welc', description='^Configure welcome settings')
     async def welc(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
+        welccmds=''
+        for cmd in self.client.commands:
+            try:
+                if cmd.description[0] == '#':
+                    welccmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(title='Welcome config',
-                            description=welcdes, color=nextcord.Color.blue())
+                            description=welccmds, color=nextcord.Color.blue())
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='defset', description='#Set a channel to the default channel for cloud bot')
     async def defset(self, ctx, channel: nextcord.TextChannel = None):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -101,7 +90,7 @@ class Config(commands.Cog):
         await collection.update_one({'_id': ctx.guild.id}, {'$set': {'default_channel': channel.id}})
         await ctx.send(f'<:check_90:881380678938296410> | Default channel set to {channel.name}')
 
-    @commands.command()
+    @commands.command(name='welcomeset', description='#Set a channel to recieve welcome messages')
     async def welcomeset(self, ctx, channel: nextcord.TextChannel = None):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -113,7 +102,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='leaveset', description='#Set a channel to recieve leave messages')
     async def leaveset(self, ctx, channel: nextcord.TextChannel = None):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -125,7 +114,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='welcoff', description='#Turn welcome and leaves off')
     async def off(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -133,7 +122,7 @@ class Config(commands.Cog):
         await collection.update_one({'_id': ctx.guild.id}, {'$set': {'welc': 0}})
         await ctx.send('<:check_90:881380678938296410> | Welcomes set to off')
 
-    @commands.command()
+    @commands.command(name='welcon', description='#Turn welcome and leaves on')
     async def on(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -141,7 +130,7 @@ class Config(commands.Cog):
         await collection.update_one({'_id': ctx.guild.id}, {'$set': {'welc': 1}})
         await ctx.send('<:check_90:881380678938296410> | Welcomes set to on')
 
-    @commands.command()
+    @commands.command(name='msgset', description='#Customize the message I send to new users who join the server')
     async def msgset(self, ctx, *, text):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -171,7 +160,7 @@ class Config(commands.Cog):
                          value=f'Welcome to {ctx.guild.name} {ctx.author.mention} you are the {count} member to join!', inline=False)
             await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='msgreset', description='#Return to the default welcome dm')
     async def msgreset(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -182,8 +171,8 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> | Something went wrong')
 
-    @commands.command()
-    async def welcomestats(self, ctx):
+    @commands.command(name='welcstats', description='#Displays important info about current welcome and leave status')
+    async def welcstats(self, ctx):
         result = await collection.find_one({'_id': ctx.guild.id})
         default_channel = self.client.get_channel(result['default_channel'])
         if result['welc'] == 0:
@@ -240,8 +229,8 @@ class Config(commands.Cog):
                       text=f'Requested by {ctx.author.name}')
         await ctx.send(embed=em)
 
-    @commands.command()
-    async def addrole(self, ctx, role: nextcord.Role):
+    @commands.command(name='addrank', description='#Adds this role to members who join the server')
+    async def addrank(self, ctx, role: nextcord.Role):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -261,8 +250,8 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> | Something went wrong')
 
-    @commands.command()
-    async def removerole(self, ctx, role: nextcord.Role):
+    @commands.command(name='removerank', description='#Remove a role that was previously added to new members')
+    async def removerank(self, ctx, role: nextcord.Role):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -275,8 +264,8 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> | Something went wrong')
 
-    @commands.command()
-    async def welcomedm(self, ctx, *, message):
+    @commands.command(name='welcdm', description='#Change the dm I send to users that join this server')
+    async def welcdm(self, ctx, *, message):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -286,8 +275,8 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> | Something went wrong')
 
-    @commands.command()
-    async def welcomedm_remove(self, ctx):
+    @commands.command(name='welcdm_remove', description='#Remove the dm I send to new users')
+    async def welcdm_remove(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -303,18 +292,25 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> | Something went wrong')
 
-    @commands.group(invoke_without_command=True)
+    @commands.group(name='bot', description='^Configure bot settings')
     async def bot(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
+        botcmds=''
+        for cmd in self.client.commands:
+            try:
+                if cmd.description[0] == '.':
+                    botcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
         em = nextcord.Embed(title='Bot config',
-                            description=botdes, color=nextcord.Color.blue())
+                            description=botcmds, color=nextcord.Color.blue())
         em.add_field(name='🔗 Useful Links',
                      value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='block_links', description='.Block all links from chat')
     async def block_links(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -325,7 +321,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='unblock_links', description='.Unblock all links from chat')
     async def unblock_links(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -336,7 +332,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='block_invites', description='.Block messages that contain discord invites')
     async def block_invites(slef, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -348,7 +344,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='unblock_invites', description='.Allow discord invites to be sent in chat')
     async def unblock_invites(slef, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -360,7 +356,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='spamchannel', description='.Set a channel that allows spam')
     async def spamchannel(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -373,7 +369,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='delspamchannel', description='.Users will be muted for spam in this channel')
     async def delspamchannel(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -384,7 +380,7 @@ class Config(commands.Cog):
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command()
+    @commands.command(name='prefix', description='.Change my prefix in your server')
     async def prefix(self, ctx, prefix):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -395,7 +391,7 @@ class Config(commands.Cog):
         await collection.update_one({'_id': ctx.guild.id}, {'$set': {'prefix': str(prefix)}})
         await ctx.send(f'<:check_90:881380678938296410> | `Prefix set to : {prefix}`')
 
-    @commands.command()
+    @commands.command(name='configstats', description='.Configuration settings overview')
     async def configstats(self, ctx):
         result = await collection.find_one({'_id': ctx.guild.id})
         spam = ''

@@ -23,7 +23,7 @@ class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(name='meme', description='!Sends a random meme')
     async def meme(self, ctx):
         msg = await ctx.send('<a:loading:885842920652034089> Loading your meme...')
         subreddit = await reddit.subreddit('memes')
@@ -41,12 +41,12 @@ class Fun(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await msg.edit(content='', embed=em)
 
-    @commands.command()
+    @commands.command(name='dadjoke', description='!Sends a dadjoke')
     async def dadjoke(self, ctx):
         dadjoke = Dadjoke()
         await ctx.send(dadjoke.joke)
 
-    @commands.command()
+    @commands.command(name='cat', description='!Sends a pic of a cute cat')
     async def cat(self, ctx):
         msg = await ctx.send('<a:loading:885842920652034089> Looking for a kitty...')
         subreddit = await reddit.subreddit('cats')
@@ -63,7 +63,7 @@ class Fun(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await msg.edit(content='', embed=em)
 
-    @commands.command()
+    @commands.command(name='cute', description='!Sends a pic from r/aww')
     async def cute(self, ctx):
         msg = await ctx.send('<a:loading:885842920652034089> Looking for a cute image...')
         subreddit = await reddit.subreddit('aww')
@@ -81,7 +81,7 @@ class Fun(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await msg.edit(content='', embed=em)
 
-    @commands.command()
+    @commands.command(name='doggy', description='!Sends a pic of a cute dog')
     async def doggy(self, ctx):
         msg = await ctx.send('<a:loading:885842920652034089> Looking for a puppy...')
         subreddit = await reddit.subreddit('DOG')
@@ -99,7 +99,7 @@ class Fun(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await msg.edit(content='', embed=em)
 
-    @commands.command()
+    @commands.command(name='pug', description='!Sends a pic of a pug')
     async def pug(self, ctx):
         msg = await ctx.send('<a:loading:885842920652034089> Looking for a pug...')
         subreddit = await reddit.subreddit('pug')
@@ -116,7 +116,7 @@ class Fun(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await msg.edit(content='', embed=em)
 
-    @commands.command()
+    @commands.command(name='nick', description='!Change your nickname')
     async def nick(self, ctx, *, nickname):
         user = ctx.author
         try:
@@ -132,7 +132,7 @@ class Fun(commands.Cog):
                 title='Command: Nick', description='**Usage:** nick <nickname>\n**Example:** nick 123eyesonme')
             await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='avatar', description='!Get a closer look at somebodys profile picture')
     async def avatar(self, ctx, member: nextcord.Member):
         embed = nextcord.Embed(color=nextcord.Color.blue())
         embed.set_image(url=member.avatar.url)
@@ -145,7 +145,7 @@ class Fun(commands.Cog):
                 title='Command: avatar', description=f'**Usage:** avatar <member>\n**Example:** avatar {ctx.author.mention}')
             await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='membercount', description='!This should be very obvious')
     async def membercount(self, ctx):
         count = 0
         for member in ctx.guild.members:
@@ -155,11 +155,11 @@ class Fun(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='roll', description='!Roll the dice')
     async def roll(self, ctx):
         await ctx.send(f'You rolled a {random.randint(1, 6)}!')
 
-    @commands.command()
+    @commands.command(name='roulet', description='!Take a chance at this classic game with a twist')
     async def roulet(self, ctx):
         member = ctx.author
         num = random.randint(1, 6)
@@ -177,7 +177,7 @@ class Fun(commands.Cog):
             return
         await ctx.send(f'`You rolled a {num} lucky you...`')
 
-    @commands.command()
+    @commands.command(name='rps', description='!Play rock paper scissors with me')
     async def rps(self, ctx, choice):
         if choice not in ['rock', 'paper', 'scissors']:
             await ctx.send('`Invalid choice only use rock, paper or scissors`')
@@ -203,18 +203,18 @@ class Fun(commands.Cog):
     async def _(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             em = nextcord.Embed(
-                title='Command: rps', description=f'**Usage:** rps <choice>\n**Example:** rps rock')
+                title='Command: rps', description=f'**Usage:** rps <choice>\n**Example:** rps rock\nChoices - rock, paper, scissors')
             await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='flip', description='!Heads or tails')
     async def flip(self, ctx):
         await ctx.send(f'{ctx.author.mention} '+random.choice(['Heads', 'Tails']))
 
-    @commands.command()
+    @commands.command(name='sus', description='!This joke is old')
     async def sus(self, ctx):
         await ctx.send('Damn bro thats kinda sus 📮')
 
-    @commands.command()
+    @commands.command(name='rickroll', description='!I wonder what this could be')
     async def rickroll(self, ctx):
         await ctx.send("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
 

@@ -34,14 +34,14 @@ class Commands(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(name='ping', description='$Check how fast I am running')
     async def ping(self, ctx):
         em = nextcord.Embed(title='Pong 🏓', description='⌛**Time** ' +
                             f'{round(self.client.latency * 1000)}ms', color=nextcord.Color.blue())
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='fiverr', description='$Buy a custom discord bot from my dev')
     async def fiverr(self, ctx):
         em = nextcord.Embed(title='Dev Fiverr Link',
                             description=f"With this link you can order a custom discord bot from {self.client.user.name}'s dev on fiverr, [Fiverr Link](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) \n[Fiverr Link 2](https://www.fiverr.com/share/3V5Y19)", color=nextcord.Color.green())
@@ -51,7 +51,7 @@ class Commands(commands.Cog):
                       text=f'Requested by {ctx.author.name}')
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='info', description='$General info about me')
     async def info(self, ctx):
         dev = self.client.get_user(568604697855000624)
         guilds = 0
@@ -82,7 +82,7 @@ class Commands(commands.Cog):
         em.set_thumbnail(url=self.client.user.avatar.url)
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='feedback', description='$Submit feedback to my dev')
     async def feedback(self, ctx):
         log = self.client.get_channel(885342944821919795)
         try:
@@ -111,7 +111,7 @@ class Commands(commands.Cog):
         await log.send(embed=em)
         await ctx.author.send('`Your suggestion has been submitted 👍`')
 
-    @commands.command()
+    @commands.command(name='update_version', description='--Update version')
     async def update_version(self, ctx, version):
         if ctx.author.id == 568604697855000624:
             with open('bot_data.json') as f:
@@ -127,20 +127,20 @@ class Commands(commands.Cog):
             else:
                 await ctx.send('`Update aborted`')
 
-    @commands.command()
+    @commands.command(name='support', description='$Join my support server')
     async def support(self, ctx):
         em = nextcord.Embed(
             description='Heres my support server! \nhttps://discord.gg/72udgVqEkf', color=nextcord.Color.blue())
         await ctx.author.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='invite', description='$Invite me to your server')
     async def invite(self, ctx):
         user = ctx.author
         em = nextcord.Embed(
             description='https://top.gg/bot/881336046778986518', color=nextcord.Color.blue())
         await user.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='send_update', description='--Send an update')
     async def send_update(self, ctx):
         if not ctx.author.id == 568604697855000624:
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
@@ -229,7 +229,7 @@ class Commands(commands.Cog):
             json.dump(data, f)
         await ctx.author.send(f'Version Updated | Prev [{prev_version}] | Current [{current}]')
 
-    @commands.command()
+    @commands.command(name='send_annoucment', description='--Send an announcment')
     async def send_announcment(self, ctx):
         if not ctx.author.id == 568604697855000624:
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')

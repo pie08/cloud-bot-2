@@ -24,7 +24,7 @@ class Util(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
+    @commands.command(name='cancel_giv', description='%Cancel an ongoing giveaway')
     async def cancel_giv(self, ctx, msg_id = 0):
         if msg_id == 0:
             await ctx.send('<:xmark:884407516363108412> Please include the giveaways id as an argument')
@@ -54,7 +54,7 @@ class Util(commands.Cog):
         with open('giveaway_data.json', 'w') as f:
             json.dump(data, f)
 
-    @commands.command()
+    @commands.command(name='reminder', description='%Set a reminder and I will remind you after some time')
     async def reminder(self, ctx, time, *, reminder='No Reminder Set'):
         x = ''
         f = ''
@@ -97,7 +97,7 @@ class Util(commands.Cog):
 
         await ctx.author.send(embed=doneEm)
 
-    @commands.command()
+    @commands.command(name='serverinfo', description='%Some basic information about this server')
     async def serverinfo(self, ctx):
         result = await collection.find_one({'_id': ctx.guild.id})
         prefix = result['prefix']
@@ -138,7 +138,7 @@ class Util(commands.Cog):
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=em)
 
-    @commands.command()
+    @commands.command(name='setafk', description='%Set an afk status as your nickname')
     async def setafk(self, ctx):
         member = ctx.author
         member_name = member.display_name
@@ -148,7 +148,7 @@ class Util(commands.Cog):
         except:
             await ctx.send('Unable to set afk status')
 
-    @commands.command()
+    @commands.command(name='warns', description='%Check how many warns a user has')
     async def warns(self, ctx, member: nextcord.Member = None):
         member = member or ctx.author
         with open('warns.json') as f:
@@ -169,7 +169,7 @@ class Util(commands.Cog):
             else:
                 await ctx.send(f'`{member} does not have any warnings`')
 
-    @commands.command()
+    @commands.command(name='whois', description=f'%Get some info about a member')
     async def whois(self, ctx, member: nextcord.Member):
         roles = []
         creation_date = member.created_at
