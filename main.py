@@ -867,6 +867,20 @@ async def help(ctx, command=None):
                 return
     await HelpButtonMenu().start(ctx)
 
+@client.command(name='devcmds', description='$Dev only commands')
+async def devcmds(ctx):
+    if ctx.author.id != 568604697855000624:
+        await ctx.send('You cannot access this command because you are not the dev!')
+        return
+    devcmds=''
+    for cmd in client.commands:
+        try:
+            if cmd.description[0:2] == '--':
+                devcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[2:]}*\n'
+        except:
+            pass
+    em=nextcord.Embed(description=devcmds, color=nextcord.Color.blue())
+    await ctx.send(embed=em)
 
 @tasks.loop(seconds=120)
 async def warn_reset():
