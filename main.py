@@ -744,7 +744,7 @@ def get_cmds(symbol, end_index = 1):
     for cmd in client.commands:
         try:
             if cmd.description[0:end_index] == symbol:
-                cmds += f'`{cmd.name.capitalize()}` | {cmd.description}\n'
+                cmds += f'`{cmd.name.capitalize()}` | {cmd.description[end_index:]}\n'
         except:
             pass
     return cmds
