@@ -119,7 +119,7 @@ class Commands(commands.Cog):
                 prev_version = data['bot_version']
                 data['bot_version'] = version
             await ctx.send(f'`Are you sure you want to change my version to {version}`')
-            msg = await self.client.wait_for('message', timeout=10)
+            msg = await self.client.wait_for('message', timeout=10, check=lambda m: m.auhtor.id == ctx.auhtor.id)
             if str(msg.content) == 'y':
                 with open('bot_data.json', 'w') as f:
                     json.dump(data, f)
