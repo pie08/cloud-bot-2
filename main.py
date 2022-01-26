@@ -738,6 +738,15 @@ async def lockdownend(ctx):
                   text=f'Issued by {ctx.author.name}')
     await ctx.send(embed=em)
 
+def get_cmds(symbol, end_index = 1):
+    cmds = ''
+    for cmd in client.commands:
+        try:
+            if cmd.description[0:end_index] == symbol:
+                cmds += f'`{cmd.name.capitalize()}` | {cmd.description}\n'
+        except:
+            pass
+    return cmds
 
 class HelpButtonMenu(menus.ButtonMenu):
     def __init__(self):
@@ -758,13 +767,7 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label="🍂 General", style=nextcord.ButtonStyle.primary)
     async def on_gen_click(self, button, interaction):
-        helpcmds=''
-        for cmd in client.commands:
-            try:
-                if cmd.description[0] == '$':
-                    helpcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
-            except:
-                pass
+        helpcmds=get_cmds('$')
         em = nextcord.Embed(title='⚙ Commands',
                             description=helpcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
