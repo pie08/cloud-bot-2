@@ -1,5 +1,6 @@
 from logging import debug, exception
 from operator import mod
+from webbrowser import get
 from discord import message
 from itsdangerous import exc
 import nextcord
@@ -776,13 +777,7 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label="⚙ Moderation", style=nextcord.ButtonStyle.primary)
     async def on_mod_click(self, button, interaction):
-        modcmds=''
-        for cmd in client.commands:
-            try:
-                if cmd.description[0] == '&':
-                    modcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
-            except:
-                pass
+        modcmds=get_cmds('&')
         em = nextcord.Embed(title='⚙ Mod commands',
                             description=modcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
@@ -791,13 +786,7 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label="🔨 Utility", style=nextcord.ButtonStyle.primary)
     async def on_util_click(self, button, interaction):
-        utilcmds=''
-        for cmd in client.commands:
-            try:
-                if cmd.description[0] == '%':
-                    utilcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
-            except:
-                pass
+        utilcmds=get_cmds('%')
         em = nextcord.Embed(title='🔨 Utility commands',
                             description=utilcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
@@ -806,13 +795,7 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label="😎 Fun", style=nextcord.ButtonStyle.primary)
     async def on_fun_click(self, button, interaction):
-        funcmds=''
-        for cmd in client.commands:
-            try:
-                if cmd.description[0] == '!':
-                    funcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
-            except:
-                pass
+        funcmds=get_cmds('!')
         em = nextcord.Embed(title='😎 Fun commands',
                             description=funcmds, color=nextcord.Color.blue())
         em.add_field(name='💼 How To Get Help',
@@ -821,13 +804,7 @@ class HelpButtonMenu(menus.ButtonMenu):
 
     @nextcord.ui.button(label='🔧 Configuration', style=nextcord.ButtonStyle.primary)
     async def on_config_click(self, button, interaction):
-        configcmds=''
-        for cmd in client.commands:
-            try:
-                if cmd.description[0] == '^':
-                    configcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
-            except:
-                pass
+        configcmds=get_cmds('^')
         em = nextcord.Embed(
             title='🔧 Configuration Commands',
             description=configcmds,
@@ -875,13 +852,7 @@ async def devcmds(ctx):
     if ctx.author.id != 568604697855000624:
         await ctx.send('You cannot access this command because you are not the dev!')
         return
-    devcmds=''
-    for cmd in client.commands:
-        try:
-            if cmd.description[0:2] == '--':
-                devcmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[2:]}*\n'
-        except:
-            pass
+    devcmds=get_cmds('--', 2)
     em=nextcord.Embed(description=devcmds, color=nextcord.Color.blue())
     await ctx.send(embed=em)
 
