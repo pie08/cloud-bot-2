@@ -1,5 +1,6 @@
 import asyncio
 from os import name
+from unittest import result
 import asyncpraw
 import nextcord
 from nextcord.ext import commands
@@ -62,9 +63,10 @@ class Commands(commands.Cog):
             all_users += 1
         result = await collection.find_one({'_id': ctx.guild.id})
         prefix = result['prefix']
-        with open('bot_data.json') as f:
-            data = json.load(f)
-            bot_version = data['bot_version']
+
+        result = await collection.find_one({'pin': '0113'})
+        bot_version = result['version']
+
         em = nextcord.Embed(
             description=f'**Guild prefix :** `{prefix}`', color=nextcord.Color.blue())
         em.set_author(name='Bot Info')
@@ -114,15 +116,12 @@ class Commands(commands.Cog):
     @commands.command(name='update_version', description='--Update version')
     async def update_version(self, ctx, version):
         if ctx.author.id == 568604697855000624:
-            with open('bot_data.json') as f:
-                data = json.load(f)
-                prev_version = data['bot_version']
-                data['bot_version'] = version
+            result = await collection.find_one({'pin': '0113'})
+            prev_version = result['version']
             await ctx.send(f'`Are you sure you want to change my version to {version}`')
-            msg = await self.client.wait_for('message', timeout=10, check=lambda m: m.auhtor.id == ctx.auhtor.id)
+            msg = await self.client.wait_for('message', timeout=10, check=lambda m: m.author.id == ctx.auhtor.id)
             if str(msg.content) == 'y':
-                with open('bot_data.json', 'w') as f:
-                    json.dump(data, f)
+                await collection.update_one({'pin': '0113'}, {'$set': {'version': version}})
                 await ctx.send(f'`Bot version changed to : {version} | Previous version : {prev_version}`')
             else:
                 await ctx.send('`Update aborted`')
@@ -146,9 +145,8 @@ class Commands(commands.Cog):
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
             return
 
-        with open('bot_data.json') as f:
-            data = json.load(f)
-            cur_version = data['bot_version']
+        result = await collection.find_one({'pin': '0113'})
+        cur_version = result['version']
 
         version_ask = await ctx.author.send(f'Please choose a version to update to, current version {cur_version} (type nill to terminate)')
         try:
@@ -178,9 +176,7 @@ class Commands(commands.Cog):
             await ctx.author.send('Update terminated')
             return
 
-        with open('bot_data.json') as f:
-            data = json.load(f)
-            correctPin = data['pin']
+        correctPin = '0113'
         minor_ask = await ctx.author.send('Please choose minor changes (type nill to terminate)')
         try:
             minor = await self.client.wait_for(
@@ -224,13 +220,9 @@ class Commands(commands.Cog):
             else:
                 continue
 
-        with open('bot_data.json') as f:
-            data = json.load(f)
-            prev_version = data['bot_version']
-            data['bot_version'] = str(version.content)
-            current = data['bot_version']
-        with open('bot_data.json', 'w') as f:
-            json.dump(data, f)
+        prev_version = result['version']
+        await collection.update_one({'pin': '0113'}, {'$set': {'version': version.content}})
+        current = version.content
         await ctx.author.send(f'Version Updated | Prev [{prev_version}] | Current [{current}]')
 
     @commands.command(name='send_annoucment', description='--Send an announcment')
