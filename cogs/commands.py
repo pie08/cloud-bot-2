@@ -119,7 +119,7 @@ class Commands(commands.Cog):
             result = await collection.find_one({'pin': '0113'})
             prev_version = result['version']
             await ctx.send(f'`Are you sure you want to change my version to {version}`')
-            msg = await self.client.wait_for('message', timeout=10, check=lambda m: m.author.id == ctx.auhtor.id)
+            msg = await self.client.wait_for('message', timeout=10, check=lambda m: m.author.id == ctx.author.id)
             if str(msg.content) == 'y':
                 await collection.update_one({'pin': '0113'}, {'$set': {'version': version}})
                 await ctx.send(f'`Bot version changed to : {version} | Previous version : {prev_version}`')
