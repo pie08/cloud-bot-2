@@ -178,22 +178,18 @@ async def giveaway(ctx):
         await ctx.send('Seems like there was a problem, you should make sure you didnt make any mistakes when creating your giveaway.')
 
     try:
-        with open('giveaway_data.json') as f:
-            data = json.load(f)
-
-            d = {
+        post = {
                 'guild_id': ctx.guild.id,
-                'msg_id': msg.id,
+                '_id': msg.id,
                 'channel_id': channel.id,
                 'prize': str(prize.content),
                 'host': ctx.author.id,
                 'end_time': str(end_delta),
                 'emoji': '🎉',
-                'giv_list': []
+                'giv_list': [],
+                'giv': '1'
             }
-            data.append(d)
-        with open('giveaway_data.json', 'w') as f:
-            json.dump(data, f, indent=4)
+        await collection.insert_one(post)
     except Exception as e:
         await ctx.send('Error writing giveaway data.')
         print(e)
@@ -207,28 +203,16 @@ async def on_raw_reaction_add(payload):
     if payload.member.bot:
         pass
     else:
-        with open('giveaway_data.json') as f:
-            data = json.load(f)
-            for d in data:
-                if d['msg_id'] == payload.message_id and d['emoji'] == payload.emoji.name:
-                    d['giv_list'].append(payload.user_id)
-        with open('giveaway_data.json', 'w') as f:
-            json.dump(data, f, indent=4)
+        result = await collection.find_one({'_id': payload.message_id})
+        if result['_id'] == payload.message_id and result['emoji'] == payload.emoji.name:
+            await collection.update_one({'_id': payload.message_id}, {'$addToSet': {'giv_list': payload.user_id}})
 
 
 @client.event
 async def on_raw_reaction_remove(payload):
-    with open('giveaway_data.json') as f:
-        data = json.load(f)
-        for d in data:
-            if d['msg_id'] == payload.message_id and d['emoji'] == payload.emoji.name:
-                x = 0
-                for id in d['giv_list']:
-                    if id == payload.user_id:
-                        d['giv_list'].pop(x)
-                    x += 1
-    with open('giveaway_data.json', 'w') as f:
-        json.dump(data, f, indent=4)
+    result = await collection.find_one({'_id': payload.message_id})
+    if result['_id'] == payload.message_id and result['emoji'] == payload.emoji.name:
+        await collection.update_one({'_id': payload.message_id}, {'$pull': {'giv_list': payload.user_id}})
 
 
 @client.event
@@ -879,43 +863,35 @@ async def warn_reset():
 
 @tasks.loop(seconds=15)
 async def giveaway_check():
-    with open('giveaway_data.json') as f:
-        data = json.load(f)
-        now = datetime.datetime.now()
-        entrants = 0
-
-        for d in data:
-            end_time = d['end_time']
-            channel = client.get_channel(d['channel_id'])
-            msg = await channel.fetch_message(d['msg_id'])
-            prize = d['prize']
-            host = client.get_user(int(d['host']))
-            if end_time <= str(now):
-                if len(d['giv_list']) == 0:
-                    winner = '`Not enough entrants`'
-                else:
-                    chosen_id = random.choice(d['giv_list'])
-                    chosen_member = client.get_user(chosen_id)
-                    winner = chosen_member.mention
-                    for id in d['giv_list']:
-                        entrants += 1
-                em = nextcord.Embed(description=f'{entrants} entrants  ✅')
-                if not entrants == 0:
-                    await channel.send(f'Congratulations {winner} you won the **{prize}**', embed=em)
-                else:
-                    await channel.send(f'{winner}, giveaway closed.', embed=em)
-                em = nextcord.Embed(
-                    title=f'{prize}', description=f'\nWinner : {winner} \nHost : {host.mention}', color=nextcord.Color.blue())
-                em.timestamp = datetime.datetime.utcnow()
-                await msg.edit(content='🎉 **GIVEAWAY ENDED** 🎉', embed=em)
-                count = 0
-                for x in data:
-                    if d['msg_id'] == x['msg_id']:
-                        del data[count]
-                    count += 1
-    with open('giveaway_data.json', 'w') as f:
-        json.dump(data, f, indent=4)
-
+    now = datetime.datetime.now()
+    entrants = 0
+    result = collection.find({'giv': '1'})
+    for doc in await result.to_list(length = 1000):
+        end_time = doc['end_time']
+        channel = client.get_channel(doc['channel_id'])
+        msg = await channel.fetch_message(doc['_id'])
+        prize = doc['prize']
+        host = client.get_user(int(doc['host']))
+        if end_time <= str(now):
+            if len(doc['giv_list']) == 0:
+                winner = '`Not enough entrants`'
+            else:
+                chosen_id = random.choice(doc['giv_list'])
+                chosen_member = client.get_user(chosen_id)
+                winner = chosen_member.mention
+                for x in doc['giv_list']:
+                    entrants += 1
+            em = nextcord.Embed(description=f'{entrants} entrants  ✅')
+            if not entrants == 0:
+                await channel.send(f'Congratulations {winner} you won the **{prize}**', embed=em)
+            else:
+                await channel.send(f'{winner}, giveaway closed.', embed=em)
+            em = nextcord.Embed(
+              title=f'{prize}', description=f'\nWinner : {winner} \nHost : {host.mention}', color=nextcord.Color.blue())
+            em.timestamp = datetime.datetime.utcnow()
+            await msg.edit(content='🎉 **GIVEAWAY ENDED** 🎉', embed=em)
+            count = 0
+            await collection.delete_one({'_id': doc['_id']})
 
 @tasks.loop(seconds=900)
 async def status_update():
