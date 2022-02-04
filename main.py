@@ -217,6 +217,7 @@ async def on_raw_reaction_remove(payload):
 
 @client.event
 async def on_message(message):
+    print(message.author.guild_permissions.administrator)
     result = await collection.find_one({'_id': message.guild.id})
     msg_content = message.content.lower()
     blocked_links = ['https://discord.gg']
