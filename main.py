@@ -230,11 +230,12 @@ async def on_message(message):
     if result:
         try:
             if result['blocked_invites'] == 1 or result['blocked_invites'] == 2:
-                if any(word in msg_content for word in blocked_links):
-                    await message.delete()
-                    em = nextcord.Embed(
-                        description=f'{message.author.name} please refrain from posting those links', color=nextcord.Color.red())
-                    await message.channel.send(embed=em)
+                if not message.author.guild_permissions.administrator:
+                    if any(word in msg_content for word in blocked_links):
+                        await message.delete()
+                        em = nextcord.Embed(
+                            description=f'{message.author.name} please refrain from posting those links', color=nextcord.Color.red())
+                        await message.channel.send(embed=em)
         except:
             pass
     if not result:
