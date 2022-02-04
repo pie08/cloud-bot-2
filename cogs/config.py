@@ -333,7 +333,7 @@ class Config(commands.Cog):
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
     @commands.command(name='block_invites', description='.Block messages that contain discord invites')
-    async def block_invites(slef, ctx):
+    async def block_invites(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -345,7 +345,7 @@ class Config(commands.Cog):
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
     @commands.command(name='unblock_invites', description='.Allow discord invites to be sent in chat')
-    async def unblock_invites(slef, ctx):
+    async def unblock_invites(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
             return
@@ -355,6 +355,19 @@ class Config(commands.Cog):
             await ctx.send('<:check_90:881380678938296410> Discord invites will now not be blocked')
         except:
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+    @commands.command(name='allow_invites', description='.Allow discord invites to be sent in a channel')
+    async def allow_invites(self, ctx, channel: nextcord.TextChannel):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$addToSet': {'allowed_invites': channel.id}})
+            await ctx.send('<:check_90:881380678938296410> Success, Invites are now allowed in that channel')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
 
     @commands.command(name='spamchannel', description='.Set a channel that allows spam')
     async def spamchannel(self, ctx, channel: nextcord.TextChannel):
