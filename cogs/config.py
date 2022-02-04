@@ -317,7 +317,7 @@ class Config(commands.Cog):
             await ctx.send('This command requires `administrator` permmisions')
             return
         try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$addToSet': {'blocked_invites': channel.id}})
+            await collection.update_one({'_id': ctx.guild.id}, {'$pull': {'blocked_invites': channel.id}})
             await ctx.send('<:check_90:881380678938296410> Success, Invites are now allowed in that channel')
         except exception as e:
             print(e)
@@ -329,7 +329,7 @@ class Config(commands.Cog):
             await ctx.send('This command requires `administrator` permmisions')
             return
         try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$pull': {'blocked_invites': channel.id}})
+            await collection.update_one({'_id': ctx.guild.id}, {'$addToSet': {'blocked_invites': channel.id}})
             await ctx.send('<:check_90:881380678938296410> Success, Invites are now not allowed in that channel')
         except exception as e:
             print(e)
