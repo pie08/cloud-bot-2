@@ -310,51 +310,6 @@ class Config(commands.Cog):
                      value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await ctx.send(embed=em)
 
-    @commands.command(name='block_links', description='.Block all links from chat')
-    async def block_links(self, ctx):
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send('This command requires `administrator` permmisions')
-            return
-        try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_invites': 2}})
-            await ctx.send('<:check_90:881380678938296410> All links will be blocked')
-        except:
-            await ctx.send('<:xmark:884407516363108412> Something went wrong')
-
-    @commands.command(name='unblock_links', description='.Unblock all links from chat')
-    async def unblock_links(self, ctx):
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send('This command requires `administrator` permmisions')
-            return
-        try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_invites': 0}})
-            await ctx.send('<:check_90:881380678938296410> All links will be unblocked')
-        except:
-            await ctx.send('<:xmark:884407516363108412> Something went wrong')
-
-    @commands.command(name='block_invites', description='.Block messages that contain discord invites')
-    async def block_invites(self, ctx):
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send('This command requires `administrator` permmisions')
-            return
-        result = await collection.find_one({'_id': ctx.guild.id})
-        try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_invites': 1}})
-            await ctx.send('<:check_90:881380678938296410> Discord invites will now be blocked')
-        except:
-            await ctx.send('<:xmark:884407516363108412> Something went wrong')
-
-    @commands.command(name='unblock_invites', description='.Allow discord invites to be sent in chat')
-    async def unblock_invites(self, ctx):
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send('This command requires `administrator` permmisions')
-            return
-        result = await collection.find_one({'_id': ctx.guild.id})
-        try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_invites': 0}})
-            await ctx.send('<:check_90:881380678938296410> Discord invites will now not be blocked')
-        except:
-            await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
     @commands.command(name='allow_invites', description='.Allow discord invites to be sent in a channel')
     async def allow_invites(self, ctx, channel: nextcord.TextChannel):
@@ -362,12 +317,102 @@ class Config(commands.Cog):
             await ctx.send('This command requires `administrator` permmisions')
             return
         try:
-            await collection.update_one({'_id': ctx.guild.id}, {'$addToSet': {'allowed_invites': channel.id}})
+            await collection.update_one({'_id': ctx.guild.id}, {'$addToSet': {'blocked_invites': channel.id}})
             await ctx.send('<:check_90:881380678938296410> Success, Invites are now allowed in that channel')
         except exception as e:
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
+    @commands.command(name='disallow_invites', description='.Block discord invites sent in a channel')
+    async def disallow_invites(self, ctx, channel: nextcord.TextChannel):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$pull': {'blocked_invites': channel.id}})
+            await ctx.send('<:check_90:881380678938296410> Success, Invites are now not allowed in that channel')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+    @commands.command(name='disallow_all_invites', description='.Block invites from all channels')
+    async def disallow_all_invites(self, ctx):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        channels = []
+        for channel in ctx.guild.text_channels:
+            channels.append(channel.id)
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_invites': channels}})
+            await ctx.send('<:check_90:881380678938296410> Success, Links are now not allowed in all channels')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+    @commands.command(name='allow_all_invites', description='.Allow invites in all channels')
+    async def allow_all_invites(self, ctx):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_invites': []}})
+            await ctx.send('<:check_90:881380678938296410> Success, Links are now not allowed in all channels')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+# LINKS
+    @commands.command(name='allow_links', description='.Allow links to be sent in a channel')
+    async def allow_links(self, ctx, channel: nextcord.TextChannel):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$pull': {'blocked_links': channel.id}})
+            await ctx.send('<:check_90:881380678938296410> Success, Links are now allowed in that channel')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+    @commands.command(name='disallow_links', description='.Block links to be sent in a channel')
+    async def disallow_links(self, ctx, channel: nextcord.TextChannel):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$addToSet': {'blocked_links': channel.id}})
+            await ctx.send('<:check_90:881380678938296410> Success, Links are now not allowed in that channel')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+    @commands.command(name='disallow_all_links', description='.Block links from all channels')
+    async def disallow_all_links(self, ctx):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        channels = []
+        for channel in ctx.guild.text_channels:
+            channels.append(channel.id)
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_links': channels}})
+            await ctx.send('<:check_90:881380678938296410> Success, Links are now not allowed in all channels')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
+
+    @commands.command(name='allow_all_links', description='.Allow links in all channels')
+    async def allow_all_links(self, ctx):
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send('This command requires `administrator` permmisions')
+            return
+        try:
+            await collection.update_one({'_id': ctx.guild.id}, {'$set': {'blocked_links': []}})
+            await ctx.send('<:check_90:881380678938296410> Success, Links are now allowed in all channels')
+        except exception as e:
+            print(e)
+            await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
     @commands.command(name='spamchannel', description='.Set a channel that allows spam')
     async def spamchannel(self, ctx, channel: nextcord.TextChannel):
