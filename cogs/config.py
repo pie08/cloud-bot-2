@@ -1,6 +1,6 @@
 from datetime import datetime
 from logging import exception
-from os import name
+from os import link, name
 from typing import Text
 import nextcord
 from nextcord.channel import VocalGuildChannel
@@ -461,14 +461,25 @@ class Config(commands.Cog):
         except:
             spam = 'No spam channels'
         try:
-            if result['blocked_invites'] == 2:
-                block = 'All Links'
-            elif result['blocked_invites'] == 1:
-                block = 'Discord Invites'
-            else:
-                block = 'Off'
-        except:
-            block = 'False'
+            links_channels = []
+            for cha in result['blocked_links']:
+                channel = self.client.get_channel(cha)
+                links_channels.append(f'{channel.name}')
+            if len(links_channels) == 0:
+                links_channels = ['None']
+        except exception as e:
+            print(e)
+            pass
+        try:
+            invites_channels = []
+            for cha in result['blocked_invites']:
+                channel = self.client.get_channel(cha)
+                invites_channels.append(f'{channel.name}')
+            if len(invites_channels) == 0:
+                invites_channels = ['None']
+        except exception as e:
+            print(e)
+            pass
         if len(spam) == 0:
             spam = 'No spam channels'
         if result['welc'] == 0:
@@ -478,7 +489,8 @@ class Config(commands.Cog):
         em = nextcord.Embed(color=nextcord.Color.blue())
         em.add_field(name='Bot Prefix', value=prefix, inline=False)
         em.add_field(name='Spam Channels', value=spam, inline=False)
-        em.add_field(name='Links Blocked?', value=block)
+        em.add_field(name='Links Blocked?', value='\n'.join(links_channels), inline=False)
+        em.add_field(name='Invites Blocked?', value='\n'.join(invites_channels), inline=False)
         em.add_field(name='Welcome Status', value=welc, inline=False)
         em.add_field(name='🔗 Useful Links',
                      value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')

@@ -219,23 +219,24 @@ async def on_raw_reaction_remove(payload):
 async def on_message(message):
     result = await collection.find_one({'_id': message.guild.id})
     msg_content = message.content.lower()
-    blocked_links = ['https://discord.gg']
-    try:
-        if result['blocked_invites'] == 2:
-            blocked_links = ['https://', 'http://']
-    except:
-        pass
+
     if message.author.id == client.user.id:
         return
     if result:
         try:
-            if result['blocked_invites'] == 1 or result['blocked_invites'] == 2:
+            if message.channel.id in result['blocked_invites']:
                 if not message.author.guild_permissions.administrator:
-                    if any(word in msg_content for word in blocked_links):
+                    if any(word in msg_content for word in ['https://discord.gg']):
                         await message.delete()
-                        em = nextcord.Embed(
-                            description=f'{message.author.name} please refrain from posting those links', color=nextcord.Color.red())
-                        await message.channel.send(embed=em)
+                        await message.channel.send(f'{message.author.name}, Please refrain from posting discord invites in this channel')
+            elif message.channel.id in result['blocked_links']:
+                if not message.author.guild_permissions.administrator:
+                    if any(word in msg_content for word in ['https://discord.gg']):
+                        await client.process_commands(message)
+                        return
+                    if any(word in msg_content for word in ['https://', 'http://']):
+                        await message.delete()
+                        await message.channel.send(f'{message.author.name}, Please refrain from posting links in this channel')
         except:
             pass
     if not result:
