@@ -472,11 +472,12 @@ class Config(commands.Cog):
             print(e)
             pass
         try:
-            invites_channels = []
-            for cha in result['blocked_invites']:
-                channel = self.client.get_channel(cha)
-                invites_channels.append(f'{channel.name}')
-            if len(invites_channels) == 0:
+            try:
+                invites_channels = []
+                for cha in result['blocked_invites']:
+                    channel = self.client.get_channel(cha)
+                    invites_channels.append(f'{channel.name}')
+            except:
                 invites_channels = ['None']
         except exception as e:
             print(e)
