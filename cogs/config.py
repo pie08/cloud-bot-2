@@ -461,11 +461,12 @@ class Config(commands.Cog):
         except:
             spam = 'No spam channels'
         try:
-            links_channels = []
-            for cha in result['blocked_links']:
-                channel = self.client.get_channel(cha)
-                links_channels.append(f'{channel.name}')
-            if len(links_channels) == 0:
+            try:
+                links_channels = []
+                for cha in result['blocked_links']:
+                    channel = self.client.get_channel(cha)
+                    links_channels.append(f'{channel.name}')
+            except:
                 links_channels = ['None']
         except exception as e:
             print(e)
