@@ -597,7 +597,9 @@ async def clear(ctx, amount=2):
         await ctx.send('This command requires `manage_messages` permission')
         return
     await ctx.channel.purge(limit=amount+1)
-    await ctx.send(f'<:check_90:881380678938296410> | Cleared {amount} messages')
+    msg = await ctx.send(f'<:check_90:881380678938296410> | Cleared {amount} messages')
+    await asyncio.sleep(2)
+    await msg.delete
 
 
 @client.command(name='mute', description='&Mute a member')
