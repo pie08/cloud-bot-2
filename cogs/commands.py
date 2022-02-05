@@ -225,7 +225,7 @@ class Commands(commands.Cog):
         current = version.content
         await ctx.author.send(f'Version Updated | Prev [{prev_version}] | Current [{current}]')
 
-    @commands.command(name='send_annoucment', description='--Send an announcment')
+    @commands.command(name='send_announcment', description='--Send an announcment')
     async def send_announcment(self, ctx):
         if not ctx.author.id == 568604697855000624:
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
