@@ -1,3 +1,4 @@
+from cgitb import text
 from datetime import datetime
 from logging import exception
 from os import link, name
@@ -415,7 +416,8 @@ class Config(commands.Cog):
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
     @commands.command(name='isblocked', description='.Check if a channel has links or invites blocked')
-    async def isbocked(self, ctx, channel: nextcord.TextChannel):
+    async def isbocked(self, ctx, textchannel: nextcord.TextChannel):
+        channel = textchannel or ctx.channel
         result = await collection.find_one({'_id': ctx.guild.id})
         em = nextcord.Embed(color=nextcord.Color.blue())
         em.set_author(name=f'Blocked Settings for {channel.name}')
