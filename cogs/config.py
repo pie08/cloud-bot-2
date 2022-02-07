@@ -414,6 +414,21 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
+    @commands.command(name='isblocked', description='.Check if a channel has links or invites blocked')
+    async def isbocked(self, ctx, channel: nextcord.TextChannel):
+        result = await collection.find_one({'_id': ctx.guild.id})
+        em = nextcord.Embed(color=nextcord.Color.blue())
+        em.set_author(name=f'Blocked Settings for {channel.name}')
+        if channel.id in result['blocked_links']:
+            em.add_field(name='Links Blocked?', value='True')
+        else:
+            em.add_field(name='Links Blocked?', value='False')
+        if channel.id in result['blocked_invites']:
+            em.add_field(name='Invites Blocked?', value='True')
+        else:
+            em.add_field(name='Invites Blocked?', value='False')
+        await ctx.send(embed=em)
+
     @commands.command(name='spamchannel', description='.Set a channel that allows spam')
     async def spamchannel(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
@@ -463,11 +478,16 @@ class Config(commands.Cog):
         try:
             try:
                 links_channels = []
+                channels = 0
+                if len(result['blocked_links']) == 0:
+                    links_channels = ['None']
                 for cha in result['blocked_links']:
                     channel = self.client.get_channel(cha)
                     links_channels.append(f'{channel.name}')
-                if len(links_channels) > 5:
-                    links_channels = ['\n'.join(links_channels[:5]), f'+ {len(links_channels)-5} more']
+                    channels += 1
+                if len(links_channels) > 10:
+                    links_channels = links_channels[:5]
+                    links_channels.append(f'+ {channels-5} more')
             except:
                 links_channels = ['None']
         except exception as e:
@@ -476,13 +496,19 @@ class Config(commands.Cog):
         try:
             try:
                 invites_channels = []
+                channels = 0
+                if len(result['blocked_invites']) == 0:
+                    invites_channels = ['None']
                 for cha in result['blocked_invites']:
                     channel = self.client.get_channel(cha)
                     invites_channels.append(f'{channel.name}')
-                if len(invites_channels) > 5:
-                    invites_channels = [invites_channels[:5], f'+ {len(invites_channels)-5} more']
+                    channels += 1
+                if len(invites_channels) > 10:
+                    invites_channels = invites_channels[:5]
+                    invites_channels.append(f'+ {channels-5} more')
             except:
                 invites_channels = ['None']
+                print(e)
         except exception as e:
             print(e)
             pass
