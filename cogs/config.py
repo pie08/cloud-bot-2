@@ -467,7 +467,7 @@ class Config(commands.Cog):
                     channel = self.client.get_channel(cha)
                     links_channels.append(f'{channel.name}')
                 if len(links_channels) > 5:
-                    links_channels = [links_channels[:5], f'+ {len(links_channels)-5} more']
+                    links_channels = ['\n'.join(links_channels[:5]), f'+ {len(links_channels)-5} more']
             except:
                 links_channels = ['None']
         except exception as e:
