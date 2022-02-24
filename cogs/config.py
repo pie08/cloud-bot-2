@@ -295,9 +295,6 @@ class Config(commands.Cog):
 
     @commands.group(name='bot', description='^Configure bot settings')
     async def bot(self, ctx):
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send('This command requires `administrator` permmisions')
-            return
         botcmds=''
         for cmd in self.client.commands:
             try:
@@ -312,7 +309,21 @@ class Config(commands.Cog):
         await ctx.send(embed=em)
 
 
-    @commands.command(name='allow_invites', description='.Allow discord invites to be sent in a channel')
+    @commands.command(name='channel_settings', description='.See a bunch of commands related to channels')
+    async def channel_settings(self, ctx):
+        chacmds=''
+        for cmd in self.client.commands:
+            try:
+                if cmd.description[0] == '_':
+                    chacmds+=f'`{cmd.name.capitalize()}` | *{cmd.description[1:]}*\n'
+            except:
+                pass
+        em = nextcord.Embed(title='Channel Settings', description=chacmds, color=nextcord.Color.blue())
+        em.add_field(name='🔗 Useful Links',
+                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+        await ctx.send(embed=em)
+
+    @commands.command(name='allow_invites', description='_Allow discord invites to be sent in a channel')
     async def allow_invites(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -324,7 +335,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='disallow_invites', description='.Block discord invites sent in a channel')
+    @commands.command(name='disallow_invites', description='_Block discord invites sent in a channel')
     async def disallow_invites(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -336,7 +347,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='disallow_all_invites', description='.Block invites from all channels')
+    @commands.command(name='disallow_all_invites', description='_Block invites from all channels')
     async def disallow_all_invites(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -351,7 +362,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='allow_all_invites', description='.Allow invites in all channels')
+    @commands.command(name='allow_all_invites', description='_Allow invites in all channels')
     async def allow_all_invites(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -364,7 +375,7 @@ class Config(commands.Cog):
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
 # LINKS
-    @commands.command(name='allow_links', description='.Allow links to be sent in a channel')
+    @commands.command(name='allow_links', description='_Allow links to be sent in a channel')
     async def allow_links(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -376,7 +387,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='disallow_links', description='.Block links to be sent in a channel')
+    @commands.command(name='disallow_links', description='_Block links to be sent in a channel')
     async def disallow_links(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -388,7 +399,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='disallow_all_links', description='.Block links from all channels')
+    @commands.command(name='disallow_all_links', description='_Block links from all channels')
     async def disallow_all_links(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -403,7 +414,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='allow_all_links', description='.Allow links in all channels')
+    @commands.command(name='allow_all_links', description='_Allow links in all channels')
     async def allow_all_links(self, ctx):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -415,7 +426,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='isblocked', description='.Check if a channel has links or invites blocked')
+    @commands.command(name='isblocked', description='_Check if a channel has links or invites blocked')
     async def isbocked(self, ctx, textchannel: nextcord.TextChannel):
         channel = textchannel or ctx.channel
         result = await collection.find_one({'_id': ctx.guild.id})
@@ -431,7 +442,7 @@ class Config(commands.Cog):
             em.add_field(name='Invites Blocked?', value='False')
         await ctx.send(embed=em)
 
-    @commands.command(name='spamchannel', description='.Set a channel that allows spam')
+    @commands.command(name='spamchannel', description='_Set a channel that allows spam')
     async def spamchannel(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
@@ -444,7 +455,7 @@ class Config(commands.Cog):
             print(e)
             await ctx.send('<:xmark:884407516363108412> Something went wrong')
 
-    @commands.command(name='delspamchannel', description='.Users will be muted for spam in this channel')
+    @commands.command(name='delspamchannel', description='_Users will be muted for spam in this channel')
     async def delspamchannel(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
             await ctx.send('This command requires `administrator` permmisions')
