@@ -42,7 +42,6 @@ intents.members = True
 client = commands.Bot(command_prefix=get_prefix, intents=intents)
 client.remove_command("help")
 
-
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
