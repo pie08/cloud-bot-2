@@ -70,7 +70,7 @@ async def on_ready():
 async def on_guild_join(guild):
     for channel in guild.text_channels:
         em = nextcord.Embed(title='👍 THANKS FOR INVITING ME',
-                            description='**Lets get you started**\n*To see all my commands use `%help`*\n*To setup Welcomes and Leaves use `%welc`*\n*To change config settings use `%bot`*\n*IMPORTANT!! Please make sure to bring my role to the \ntop of the hierarchy under settings. \nThis is to make sure all of my commands are functionable for your server*', color=nextcord.Color.green())
+                            description='**Lets get you started**\n*To see all my commands use `%help`*\n*To setup Welcomes and Leaves use `%welc`*\n*To change config settings use `%bot`*\n*IMPORTANT!! Please make sure to bring my role to the top of the \nhierarchy under settings. \nThis is to make sure all of my commands are functionable for your server*', color=nextcord.Color.green())
         await channel.send(embed=em)
         break
 
