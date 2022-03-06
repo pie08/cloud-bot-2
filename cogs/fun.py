@@ -179,12 +179,12 @@ class Fun(commands.Cog):
 
     @commands.command(name='rps', description='!Play rock paper scissors with me')
     async def rps(self, ctx, choice):
-        if choice not in ['r', 'p', 's']:
-            await ctx.send('`Invalid choice only use r, p or s`')
+        if choice not in ['rock', 'paper', 'scissors']:
+            await ctx.send('`Invalid choice only use rock, paper or scissors`')
             return
-        d = {'r': 1, 'p': 2, 's': 3}
+        d = {'rock': 1, 'paper': 2, 'scissors': 3}
         user_choice = d[choice]
-        x = random.choice(['r', 'p', 's'])
+        x = random.choice(['rock', 'paper', 'scissors'])
         bot_choice = d[x]
         if user_choice > bot_choice:
             if user_choice-2 == bot_choice:
@@ -203,7 +203,7 @@ class Fun(commands.Cog):
     async def _(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             em = nextcord.Embed(
-                title='Command: rps', description=f'**Usage:** rps <choice>\n**Example:** rps r\nChoices - r, p, s')
+                title='Command: rps', description=f'**Usage:** rps <choice>\n**Example:** rps rock\nChoices - rock, paper, scissors')
             await ctx.send(embed=em)
 
     @commands.command(name='flip', description='!Heads or tails')
