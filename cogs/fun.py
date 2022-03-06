@@ -179,25 +179,27 @@ class Fun(commands.Cog):
 
     @commands.command(name='rps', description='!Play rock paper scissors with me')
     async def rps(self, ctx, choice):
-        if choice not in ['rock', 'paper', 'scissors']:
+        if choice not in ['rock', 'paper', 'scissors', 'r', 'p', 's']:
             await ctx.send('`Invalid choice only use rock, paper or scissors`')
             return
-        d = {'rock': 1, 'paper': 2, 'scissors': 3}
+        d = {'rock': 1, 'paper': 2, 'scissors': 3, 'r': 1, 'p': 2, 's': 3}
+        dic = {1: 'rock', 2: 'paper', 3: 'scissors'}
         user_choice = d[choice]
+        clean_choice = dic[user_choice]
         x = random.choice(['rock', 'paper', 'scissors'])
         bot_choice = d[x]
         if user_choice > bot_choice:
             if user_choice-2 == bot_choice:
-                await ctx.send(f'You chose **{choice}**, I chose **{x}**\n{x} wins!')
+                await ctx.send(f'You chose **{clean_choice}**, I chose **{x}**\n{x} wins!')
                 return
-            await ctx.send(f'You chose **{choice}**, I chose **{x}**\n{choice} wins!')
+            await ctx.send(f'You chose **{clean_choice}**, I chose **{x}**\n{clean_choice} wins!')
         elif bot_choice > user_choice:
             if bot_choice-2 == user_choice:
-                await ctx.send(f'You chose **{choice}**, I chose **{x}**\n{choice} wins!')
+                await ctx.send(f'You chose **{clean_choice}**, I chose **{x}**\n{clean_choice} wins!')
                 return
-            await ctx.send(f'You chose **{choice}**, I chose **{x}**\n{x} wins!')
+            await ctx.send(f'You chose **{clean_choice}**, I chose **{x}**\n{x} wins!')
         elif bot_choice == user_choice:
-            await ctx.send(f'You chose **{choice}**, I chose **{x}**\nTie!')
+            await ctx.send(f'You chose **{clean_choice}**, I chose **{x}**\nTie!')
 
     @rps.error
     async def _(self, ctx, error):
