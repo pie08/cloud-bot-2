@@ -179,12 +179,12 @@ class Fun(commands.Cog):
 
     @commands.command(name='rps', description='!Play rock paper scissors with me')
     async def rps(self, ctx, choice):
-        if choice not in ['rock', 'paper', 'scissors']:
-            await ctx.send('`Invalid choice only use rock, paper or scissors`')
+        if choice not in ['r', 'p', 's']:
+            await ctx.send('`Invalid choice only use r, p or s`')
             return
-        d = {'rock': 1, 'paper': 2, 'scissors': 3}
+        d = {'r': 1, 'p': 2, 's': 3}
         user_choice = d[choice]
-        x = random.choice(['rock', 'paper', 'scissors'])
+        x = random.choice(['r', 'p', 's'])
         bot_choice = d[x]
         if user_choice > bot_choice:
             if user_choice-2 == bot_choice:
