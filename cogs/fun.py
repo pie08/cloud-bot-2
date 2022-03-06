@@ -203,7 +203,7 @@ class Fun(commands.Cog):
     async def _(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             em = nextcord.Embed(
-                title='Command: rps', description=f'**Usage:** rps <choice>\n**Example:** rps rock\nChoices - rock, paper, scissors')
+                title='Command: rps', description=f'**Usage:** rps <choice>\n**Example:** rps r\nChoices - r, p, s')
             await ctx.send(embed=em)
 
     @commands.command(name='flip', description='!Heads or tails')
