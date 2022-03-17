@@ -218,6 +218,9 @@ async def on_raw_reaction_remove(payload):
 async def on_message(message):
     result = await collection.find_one({'_id': message.guild.id})
     msg_content = message.content.lower()
+    user = message.author
+    guild = message.guild
+    counter = 0
 
     if message.author.id == client.user.id:
         return
@@ -270,9 +273,6 @@ async def on_message(message):
     if str(message.content) == 'sus':
         await message.reply('just stop')
 
-    user = message.author
-    guild = message.guild
-    counter = 0
     if result:
         try:
             for x in result['spam_channel']:

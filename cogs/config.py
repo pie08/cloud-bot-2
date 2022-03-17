@@ -503,7 +503,7 @@ class Config(commands.Cog):
                     links_channels.append(f'+ {channels-5} more')
             except:
                 links_channels = ['None']
-        except exception as e:
+        except Exception as e:
             print(e)
             pass
         try:
@@ -522,7 +522,7 @@ class Config(commands.Cog):
             except:
                 invites_channels = ['None']
                 print(e)
-        except exception as e:
+        except Exception as e:
             print(e)
             pass
         if len(spam) == 0:
