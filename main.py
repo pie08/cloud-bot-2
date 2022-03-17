@@ -255,6 +255,21 @@ async def on_message(message):
         prefix = result['prefix']
         await message.channel.send(f'`My prefix is : {prefix}`')
 
+    if user.display_name[:5] == '[AFK]':
+        try:
+            msg = await message.channel.send("Seems like you're back, removing AFK status")
+            await user.edit(nick=user.display_name.replace('[AFK]', ''))
+            await asyncio.sleep(10)
+            await msg.delete()
+        except Exception as e:
+            print(e)
+    await client.process_commands(message)
+
+    if str(message.content) == '📮':
+        await message.reply('i cant take it anymore')
+    if str(message.content) == 'sus':
+        await message.reply('just stop')
+
     user = message.author
     guild = message.guild
     counter = 0
@@ -288,21 +303,6 @@ async def on_message(message):
             await message.channel.send(embed=em)
             await asyncio.sleep(600)
             await user.remove_roles(muted_role)
-
-    if user.display_name[:5] == '[AFK]':
-        try:
-            msg = await message.channel.send("Seems like you're back, removing AFK status")
-            await user.edit(nick=user.display_name.replace('[AFK]', ''))
-            await asyncio.sleep(10)
-            await msg.delete()
-        except Exception as e:
-            print(e)
-    await client.process_commands(message)
-
-    if str(message.content) == '📮':
-        await message.reply('i cant take it anymore')
-    if str(message.content) == 'sus':
-        await message.reply('just stop')
 
 
 @client.event
