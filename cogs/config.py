@@ -1,5 +1,6 @@
 from cgitb import text
 from datetime import datetime
+from functools import _Descriptor
 from logging import exception
 from os import link, name
 from typing import Text
@@ -442,6 +443,18 @@ class Config(commands.Cog):
             em.add_field(name='Invites Blocked?', value='False')
         await ctx.send(embed=em)
 
+    @commands.command(name='isspam', description='_Check if a channel is a spam channel')
+    async def isspam(self, ctx, textchannel: nextcord.TextChannel):
+        channel = textchannel or ctx.channel
+        result = await collection.find_one({'_id': ctx.guild.id})
+        em = nextcord.Embed(color=nextcord.Color.blue())
+        em.set_author(name=f'Spam Settings for {channel.name}')
+        if channel.id in result['spam_channel']:
+            em.add_field(name='Spam Allowed?', value='True')
+        else:
+            em.add_field(name='Spam Allowed?', value='False')
+        await ctx.send(embed=em)
+
     @commands.command(name='spamchannel', description='_Set a channel that allows spam')
     async def spamchannel(self, ctx, channel: nextcord.TextChannel):
         if not ctx.author.guild_permissions.administrator:
@@ -476,72 +489,6 @@ class Config(commands.Cog):
             return
         await collection.update_one({'_id': ctx.guild.id}, {'$set': {'prefix': str(prefix)}})
         await ctx.send(f'<:check_90:881380678938296410> | `Prefix set to : {prefix}`')
-
-    @commands.command(name='configstats', description='.Configuration settings overview')
-    async def configstats(self, ctx):
-        result = await collection.find_one({'_id': ctx.guild.id})
-        spam = ''
-        prefix = result['prefix']
-        try:
-            for x in result['spam_channel']:
-                cha = self.client.get_channel(x)
-                spam += cha.mention + ' '
-        except:
-            spam = 'No spam channels'
-        try:
-            try:
-                links_channels = []
-                channels = 0
-                if len(result['blocked_links']) == 0:
-                    links_channels = ['None']
-                for cha in result['blocked_links']:
-                    channel = self.client.get_channel(cha)
-                    links_channels.append(f'{channel.name}')
-                    channels += 1
-                if len(links_channels) > 10:
-                    links_channels = links_channels[:5]
-                    links_channels.append(f'+ {channels-5} more')
-            except:
-                links_channels = ['None']
-        except Exception as e:
-            print(e)
-            pass
-        try:
-            try:
-                invites_channels = []
-                channels = 0
-                if len(result['blocked_invites']) == 0:
-                    invites_channels = ['None']
-                for cha in result['blocked_invites']:
-                    channel = self.client.get_channel(cha)
-                    invites_channels.append(f'{channel.name}')
-                    channels += 1
-                if len(invites_channels) > 10:
-                    invites_channels = invites_channels[:5]
-                    invites_channels.append(f'+ {channels-5} more')
-            except:
-                invites_channels = ['None']
-                print(e)
-        except Exception as e:
-            print(e)
-            pass
-        if len(spam) == 0:
-            spam = 'No spam channels'
-        if result['welc'] == 0:
-            welc = 'Welcomes Off!'
-        else:
-            welc = 'Welcomes On!'
-        em = nextcord.Embed(color=nextcord.Color.blue())
-        em.add_field(name='Bot Prefix', value=prefix, inline=False)
-        em.add_field(name='Spam Channels', value=spam, inline=False)
-        em.add_field(name='Links Blocked?', value='\n'.join(links_channels), inline=False)
-        em.add_field(name='Invites Blocked?', value='\n'.join(invites_channels), inline=False)
-        em.add_field(name='Welcome Status', value=welc, inline=False)
-        em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
-        em.set_author(name='Config Overview')
-        em.timestamp = datetime.utcnow()
-        await ctx.send(embed=em)
 
 
 def setup(client):
