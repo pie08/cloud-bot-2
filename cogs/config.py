@@ -1,6 +1,5 @@
 from cgitb import text
 from datetime import datetime
-from functools import _Descriptor
 from logging import exception
 from os import link, name
 from typing import Text
