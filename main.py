@@ -800,6 +800,15 @@ class HelpButtonMenu(menus.ButtonMenu):
                      value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`')
         await self.message.edit(embed=em)
 
+    @nextcord.ui.button(label='💸 Economy', style=nextcord.ButtonStyle.primary)
+    async def on_eco_click(self, button, interaction):
+        ecocmds=get_cmds('>')
+        em = nextcord.Embed(title='💸 Economy',
+                            description=ecocmds , color = nextcord.Color.blue())
+        em.add_field(name='💼 How To Get Help',
+                     value='*If you need help on a command you may type my prefix and then* \n`help <name of command>`')
+        await self.message.edit(embed=em)
+        
     @nextcord.ui.button(label='🔧 Configuration', style=nextcord.ButtonStyle.primary)
     async def on_config_click(self, button, interaction):
         configcmds=get_cmds('^')
@@ -889,7 +898,7 @@ async def add_to_wallet(id, ammount):
 async def add_item(id, d):
     await bank.update_one({"_id": id}, {'$push': {'inv': d}})
 
-@client.command(name='openbank', description='Open a bank')
+@client.command(name='openbank', description='>Open a bank')
 async def openbank(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     if result:
@@ -903,7 +912,7 @@ async def openbank(ctx):
         })
         await ctx.reply('`Successfully opened a bank account`')
 
-@client.command(name='closebank', description='Close your bank account')
+@client.command(name='closebank', description='>Close your bank account')
 async def closebank(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     if not result:
@@ -933,7 +942,7 @@ async def closebank(ctx):
     else:
         await ctx.reply('`Terminated`')
 
-@client.command(name='bal', description = 'Check yout balance')
+@client.command(name='bal', description = '>Check yout balance')
 async def bal(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     if result:
@@ -960,7 +969,7 @@ async def bal(ctx):
     else:
         await ctx.reply('`You do not have a bank account open, please open one first`')
 
-@client.command(name='beg', description='Beg for money')
+@client.command(name='beg', description='>Beg for money')
 @commands.cooldown(1, 3, commands.BucketType.user)
 async def beg(ctx):
     num = random.randint(0, 100)
@@ -980,7 +989,7 @@ async def _(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.reply('`Woah! Slow down there your still on cooldown!`')
 
-@client.command(name='dep', description='Deposit money into your bank account')
+@client.command(name='dep', description='>Deposit money into your bank account')
 async def dep(ctx, choice=None):
     result = await bank.find_one({'_id': ctx.author.id})
     maxx = result['wallet']
@@ -1015,7 +1024,7 @@ async def dep(ctx, choice=None):
     await transfer_bank(ctx.author.id, int_ammount)
     await ctx.reply(f'`Successfully deposited {int_ammount} into your bank account!`')
 
-@client.command(name='wd', description='Withdraw money from your bank account into your wallet')
+@client.command(name='wd', description='>Withdraw money from your bank account into your wallet')
 async def wd(ctx, x = None):
     result = await bank.find_one({'_id': ctx.author.id})
     maxx = result['bal']
@@ -1055,7 +1064,7 @@ async def wd(ctx, x = None):
     await ctx.reply(f'`Successfully withdrew {int_ammount} into your wallet!`')
 
 
-@client.command(name = 'transfer', description='Transfer money')
+@client.command(name = 'transfer', description='>Transfer money')
 async def transfer(ctx, user: nextcord.Member = None, ammount = None):
     result = await bank.find_one({'_id': ctx.author.id})
     trans_user = await bank.find_one({'_id': user.id})
@@ -1112,7 +1121,7 @@ async def _(ctx, error):
 
 # Items and Inv
 
-@client.command(name='inv', description='Your inventory')
+@client.command(name='inv', description='>Your inventory')
 async def inv(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     em = nextcord.Embed(color=nextcord.Color.blue())
@@ -1141,7 +1150,7 @@ async def inv(ctx):
         em.add_field(name=f'{item} - {ammount}x', value=f'Worth ${price}', inline=False)
     await ctx.reply(embed=em)
 
-@client.command(name='search', description='Search for items and money')
+@client.command(name='search', description='>Search for items and money')
 @commands.cooldown(1, 30, commands.BucketType.user)
 async def search(ctx):
     items = [{'Wallet': 100}, {'Old Revolver': 150}, {'Grandmas Ashes': 50}, {'Old Guitar': 75}, {'Guitar': 100}, {'Les Paul Guitar': 1000}, {'Block Of Cheese': 10}, {'Moon Rock': 1000}]
@@ -1155,7 +1164,7 @@ async def _(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.reply('`Woah! Slow down there your still on cooldown!`')
 
-@client.command(name='sell', description='Sell items')
+@client.command(name='sell', description='>Sell items')
 async def sell(ctx, *items):
     item = ' '.join(items)
     print(item)
@@ -1197,7 +1206,7 @@ async def _(ctx, error):
 store_items = {'hunting rifle': 75000, 'laptop': 50000, 'ruby': 100000}
 store_des = {'hunting rifle': 'Can be used to hunt animals', 'laptop': 'Post memes and get paid for it', 'ruby': 'It looks cool I guess'}
 
-@client.command(name='store', description='Buy items')
+@client.command(name='store', description='>Buy items')
 async def store(ctx):
     des = 'Here are some items you can buy!\n\n'
     for item in list(store_items.items()):
@@ -1207,7 +1216,7 @@ async def store(ctx):
     em.set_author(name='Store')
     await ctx.reply(embed=em)
 
-@client.command(name='buy', description='Buy items in the store')
+@client.command(name='buy', description='>Buy items in the store')
 async def buy(ctx, *item):
     choice = ' '.join(item).lower()
     result = await bank.find_one({'_id': ctx.author.id})
@@ -1244,7 +1253,7 @@ async def buy(ctx, *item):
 jobs_dict = {'janitor': 10000, 'office worker': 50000, 'car dealsman': 100000}
 jobs_pay = {'janitor': 1000, 'office worker': 3000, 'car dealsman': 5000}
 
-@client.command(name='jobs', description='Get a job for yourself!')
+@client.command(name='jobs', description='>Get a job for yourself!')
 async def jobs(ctx):
     des = f'More jobs will become available with a higher bank balance\n\n'
     result = await bank.find_one({'_id': ctx.author.id})
@@ -1259,7 +1268,7 @@ async def jobs(ctx):
     em.set_footer(text='To apply for a job use the apply command')
     await ctx.reply(embed=em)
 
-@client.command(name='apply', description='Apply for a job')
+@client.command(name='apply', description='>Apply for a job')
 async def apply(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     jobs = list(jobs_dict.keys())
@@ -1291,7 +1300,7 @@ async def apply(ctx):
     else:
         await ctx.reply('`Sorry! Something went wrong!`')
 
-@client.command(name='quit', description='Quit your job')
+@client.command(name='quit', description='>Quit your job')
 async def quit(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     try:
@@ -1303,7 +1312,7 @@ async def quit(ctx):
     await bank.update_one({'_id': ctx.author.id}, {'$unset': {'job': ''}})
     await ctx.reply('`You quit your job!`')
 
-@client.command(name='work', description='Work for money!')
+@client.command(name='work', description='>Work for money!')
 @commands.cooldown(1, 60, commands.BucketType.user)
 async def work(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
@@ -1344,7 +1353,7 @@ async def _(ctx, error):
 
 # Item specific commands
 
-@client.command(name='hunt', description='Hunt animals!')
+@client.command(name='hunt', description='>Hunt animals!')
 async def hunt(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     stuff = [{'deer': 500}, {'rabbit': 250}, {'rabbit foot': 1000}, {'turtle': 150}, {'dirt': 5}, {'fat kangaroo': 1500}]
@@ -1417,7 +1426,7 @@ class pmButtonMenu(menus.ButtonMenu):
         await add_to_wallet(self.ctx.author.id, num)
         await self.message.edit(embed=em)
 
-@client.command(name='pm', description='Post memes!')
+@client.command(name='pm', description='>Post memes!')
 @commands.cooldown(1, 45, commands.BucketType.user)
 async def pm(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
