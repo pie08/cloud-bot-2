@@ -45,7 +45,7 @@ class Commands(commands.Cog):
     @commands.command(name='fiverr', description='$Buy a custom discord bot from my dev')
     async def fiverr(self, ctx):
         em = nextcord.Embed(title='Dev Fiverr Link',
-                            description=f"With this link you can order a custom discord bot from {self.client.user.name}'s dev on fiverr, [Fiverr Link](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) \n[Fiverr Link 2](https://www.fiverr.com/share/3V5Y19)", color=nextcord.Color.green())
+                            description=f"With this link you can order a custom discord bot from {self.client.user.name}'s dev on fiverr, [Fiverr Link](https://www.fiverr.com/share/vEGEpW)", color=nextcord.Color.green())
         em.set_thumbnail(
             url='https://cdn-images-1.medium.com/max/1200/1*FfEOiku2EkgoQy_bf8UL6A.png')
         em.set_footer(icon_url=ctx.author.avatar.url,
@@ -78,7 +78,7 @@ class Commands(commands.Cog):
         em.add_field(name='OS', value='`Windows 10`')
         em.add_field(name='Bot Version', value=f'`{bot_version}`')
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)', inline=False)
+                     value='[My Fiverr](https://www.fiverr.com/share/vEGEpW) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)', inline=False)
         em.set_footer(icon_url=ctx.author.avatar.url,
                       text=f'Requested by {ctx.author.name}')
         em.set_thumbnail(url=self.client.user.avatar.url)
@@ -213,7 +213,7 @@ class Commands(commands.Cog):
             if channel:
                 em = nextcord.Embed(
                     title=f'Version {str(version.content)} Patch Notes',
-                    description=f'**Major Changes** - *{str(major.content)}*\n**Minor Changes** - *{str(minor.content)}*\n\nInvite Me! - <https://top.gg/bot/881336046778986518>\nSupport Server - <https://discord.gg/72udgVqEkf>\nOrder a Bot - <https://www.fiverr.com/share/BdeeAG>',
+                    description=f'**Major Changes** - *{str(major.content)}*\n**Minor Changes** - *{str(minor.content)}*\n\nInvite Me! - <https://top.gg/bot/881336046778986518>\nSupport Server - <https://discord.gg/72udgVqEkf>\nOrder a Bot - <https://www.fiverr.com/share/vEGEpW>',
                     color=nextcord.Color.blue()
                 )
                 await channel.send(embed=em)
@@ -273,7 +273,7 @@ class Commands(commands.Cog):
                 count += 1
                 em = nextcord.Embed(
                     title=f'Announcment',
-                    description=f'{str(announcment.content)}\n\nInvite Me! - <https://top.gg/bot/881336046778986518>\nSupport Server - <https://discord.gg/72udgVqEkf>\nOrder a Bot - <https://www.fiverr.com/share/BdeeAG>',
+                    description=f'{str(announcment.content)}\n\nInvite Me! - <https://top.gg/bot/881336046778986518>\nSupport Server - <https://discord.gg/72udgVqEkf>\nOrder a Bot - <https://www.fiverr.com/share/vEGEpW>',
                     color=nextcord.Color.blue()
                 )
                 await channel.send(embed=em)

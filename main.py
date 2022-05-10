@@ -761,7 +761,7 @@ class HelpButtonMenu(menus.ButtonMenu):
         em.add_field(
             name='❔ Info', value=f'*To access the commands use the button at the bottom*\nDeveloped by **{dev}**', inline=False)
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+                     value='[My Fiverr](https://www.fiverr.com/share/vEGEpW) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         return await channel.send(embed=em, view=self)
 
     @nextcord.ui.button(label="🍂 General", style=nextcord.ButtonStyle.primary)
@@ -834,7 +834,7 @@ class HelpButtonMenu(menus.ButtonMenu):
         em.add_field(
             name='❔ Info', value=f'*To access the commands use the button at the bottom*\nDeveloped by **{dev}**', inline=False)
         em.add_field(name='🔗 Useful Links',
-                     value='[My Fiverr](https://www.fiverr.com/tyrus_b/program-a-professional-and-custom-discord-bot-for-you) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
+                     value='[My Fiverr](https://www.fiverr.com/share/vEGEpW) | [Support Server](https://discord.gg/72udgVqEkf) | [Invite Me](https://top.gg/bot/881336046778986518)')
         await self.message.edit(embed=em)
 
 
