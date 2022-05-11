@@ -282,6 +282,26 @@ class Commands(commands.Cog):
 
         await ctx.auhtor.send(f'Announcment Sent to {count} servers!')
 
+    @commands.command(name='send_main', description='--Send an announcment to every servers main channel')
+    async def send_main(self, ctx):
+        if not ctx.author.id == 568604697855000624:
+            await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
+            return
+
+        msg = await ctx.author.send('What you you like to send?\n*Fiverr Ad*')
+        try:
+            choice = self.client.wait_for('message', check=lambda m: m.author.id == 568604697855000624, timeout=20)
+        except asyncio.TimeoutError:
+            await msg.edit(content='⏳ Timed Out')
+            return
+        if str(choice.content) == 'nill':
+            await ctx.author.send('Terminated')
+            return
+        elif str(choice.content.lower()) == 'fiverr ad':
+            em = nextcord.Embed(description="I am Tyrus and I have been a private discord bot developer for **well over a year**. I have since wanted to share my skills to the public in order to bring the best most useful bots into peoples servers. I am **extremally passionate** about what I do and want to create the **best quality and personalized products** that I'm able to produce.", 
+            color=nextcord.Color.blue())
+            em.set_author(name='Buy a professional personalized discord bot from my developer!')
+            await ctx.channel.send(embed=em)
 
 def setup(client):
     client.add_cog(Commands(client))
