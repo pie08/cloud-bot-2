@@ -288,6 +288,7 @@ class Commands(commands.Cog):
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
             return
 
+        # GET DEFAULT CHANNEL IN MONGODB
         msg = await ctx.author.send('What you you like to send?\n*Fiverr Ad*')
         try:
             choice = await self.client.wait_for('message', check=lambda m: m.author.id == 568604697855000624, timeout=20)
@@ -298,10 +299,22 @@ class Commands(commands.Cog):
             await ctx.author.send('Terminated')
             return
         elif str(choice.content.lower()) == 'fiverr ad':
-            em = nextcord.Embed(description="I am Tyrus and I have been a private discord bot developer for **well over a year**. I have since wanted to share my skills to the public in order to bring the best most useful bots into peoples servers. I am **extremally passionate** about what I do and want to create the **best quality and personalized products** that I'm able to produce.", 
+            em = nextcord.Embed(title='Buy a professional personalized discord bot from my developer!', description="I am Tyrus and I have been a private discord bot developer for **well over a year**. I have since wanted to share my skills to the public in order to bring the best most useful bots into peoples servers. I am **extremally passionate** about what I do and want to create the **best quality and personalized products** that I'm able to produce.", 
             color=nextcord.Color.blue())
-            em.set_author(name='Buy a professional personalized discord bot from my developer!')
-            await ctx.channel.send(embed=em)
+            em.add_field(name='🤖What My Bots Offer!', value='*API Integration\nEconomy System\nGiveaways\nModeration\nEffective Lockdown Command\nLink Blocking\nSpam Protection\nWarning System\nMany fun entertaining commands\nAnd so much more!*')
+            em.add_field(name='💸Pricing!', value='*My bot creation services start at just $15! Increasing to $30 for the next more complex level of bot, and eventually to $60 for the most complex bot that I offer. All my bots are professionally made with your intrests and needs in mind. You have full control over your bot because it is being custom made with you in mind.*')
+            em.add_field(name='📈How To Order A Bot', value='Ordering a custom bot from me is easier than you may expect. All you need to do is click [here](https://www.fiverr.com/share/vEGEpW) to be redirected to my fiverr freelancing page.')
+            count = 0
+            for guild in self.client.guilds:
+                channel = guild.text_channels[0]
+                if channel:
+                    count +=1
+                    await channel.send(embed=em)
+                    await asyncio.sleep(2)
+                else:
+                    continue
+            await ctx.author.send(f'Advertising has concluded - Sent to {count} servers!')
+
 
 def setup(client):
     client.add_cog(Commands(client))
