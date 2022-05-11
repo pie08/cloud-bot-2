@@ -290,7 +290,7 @@ class Commands(commands.Cog):
 
         msg = await ctx.author.send('What you you like to send?\n*Fiverr Ad*')
         try:
-            choice = self.client.wait_for('message', check=lambda m: m.author.id == 568604697855000624, timeout=20)
+            choice = await self.client.wait_for('message', check=lambda m: m.author.id == 568604697855000624, timeout=20)
         except asyncio.TimeoutError:
             await msg.edit(content='⏳ Timed Out')
             return
