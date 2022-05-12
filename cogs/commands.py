@@ -288,7 +288,6 @@ class Commands(commands.Cog):
             await ctx.send(f'<:xmark:884407516363108412> Sorry, but this is a developer only command')
             return
 
-        # GET DEFAULT CHANNEL IN MONGODB
         msg = await ctx.author.send('What you you like to send?\n*Fiverr Ad*')
         try:
             choice = await self.client.wait_for('message', check=lambda m: m.author.id == 568604697855000624, timeout=20)
