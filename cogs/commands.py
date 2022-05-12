@@ -300,10 +300,12 @@ class Commands(commands.Cog):
         elif str(choice.content.lower()) == 'fiverr ad':
             em = nextcord.Embed(title='Buy a professional personalized discord bot from my developer!', description="I am Tyrus and I have been a private discord bot developer for **well over a year**. I have since wanted to share my skills to the public in order to bring the best most useful bots into peoples servers. I am **extremally passionate** about what I do and want to create the **best quality and personalized products** that I'm able to produce.", 
             color=nextcord.Color.blue())
-            em.add_field(name='🤖What My Bots Offer!', value='*API Integration\nEconomy System\nGiveaways\nModeration\nEffective Lockdown Command\nLink Blocking\nSpam Protection\nWarning System\nMany fun entertaining commands\nAnd so much more!*')
+            em.add_field(name='🤖What My Bots Offer!', value='*• API Integration\n• Economy System\n• Giveaways\n• Moderation\n• Effective Lockdown Command\n• Link Blocking\n• Spam Protection\n• Warning System\n• Many fun entertaining commands\n• And so much more!*')
             em.add_field(name='💸Pricing!', value='*My bot creation services start at just $15! Increasing to $30 for the next more complex level of bot, and eventually to $60 for the most complex bot that I offer. All my bots are professionally made with your intrests and needs in mind. You have full control over your bot because it is being custom made with you in mind.*')
             em.add_field(name='📈How To Order A Bot', value='Ordering a custom bot from me is easier than you may expect. All you need to do is click [here](https://www.fiverr.com/share/vEGEpW) to be redirected to my fiverr freelancing page.')
+            em.add_field(name='💸Buy A Bot Here', value='✨ [This Is Where You Can Buy A Bot](https://www.fiverr.com/share/vEGEpW) ✨', inline=True)
             count = 0
+            await ctx.send(embed=em)
             for guild in self.client.guilds:
                 channel = guild.text_channels[0]
                 if channel:
