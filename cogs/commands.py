@@ -29,7 +29,6 @@ reddit = asyncpraw.Reddit(client_id='Oa9pF-GySCz4WRIjOKwUrA',
                           password='Tyrus113',
                           user_agent='reddit_praw')
 
-
 class Commands(commands.Cog):
 
     def __init__(self, client):
