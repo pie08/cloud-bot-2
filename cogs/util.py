@@ -156,9 +156,10 @@ class Util(commands.Cog):
             for d in data:
                 if d['user_id'] == member.id:
                     warns = d['warns']
-                    date = d['warn_date_remove'][:11]
+                    warn_date = d['warn_date'][:11]
+                    remove_date = d['warn_date_remove'][:11]
                     em = nextcord.Embed(
-                        description=f'*Warnings expire -* `{date}`')
+                        description=f'*Initial warning date* - `{warn_date}`\n*Warnings expire -* `{remove_date}`')
                     em.set_author(
                         name=f'{member} currently has {warns} warnings', icon_url=member.avatar.url)
                     em.set_footer(icon_url=ctx.author.avatar.url,
