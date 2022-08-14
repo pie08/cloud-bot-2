@@ -942,7 +942,7 @@ async def closebank(ctx):
     else:
         await ctx.reply('`Terminated`')
 
-@client.command(name='bal', description = '>Check yout balance')
+@client.command(name='bal', description = '>Check your balance')
 async def bal(ctx):
     result = await bank.find_one({'_id': ctx.author.id})
     if result:
@@ -1200,6 +1200,10 @@ async def sell(ctx, *items):
 async def _(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.reply('`Please provide the item you would like to sell\nEx. !sell guitar`')
+
+@client.command(name='trade', description='Trade items to people')
+async def trade(ctx):
+    pass
 
 # Store
 
