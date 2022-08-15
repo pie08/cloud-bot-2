@@ -188,7 +188,8 @@ async def giveaway(ctx):
         return
 
     try:
-        print(int(winners.content))
+        win_int = str(winners.content)
+        print(win_int)
     except:
         await ctx.send('`The number of winners must only be a number!`')
         return
