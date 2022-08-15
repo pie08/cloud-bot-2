@@ -1559,7 +1559,7 @@ async def giveaway_check():
                 chosen_members = []
                 for x in range(0, winners):
                     chosen_id = random.choice(doc['giv_list'])
-                    await collection.update_one({'guild_id': doc['guild_id']}, {'$pull': {'giv_list': chosen_id}})
+                    await collection.update_one({'_id': doc['_id']}, {'$pull': {'giv_list': chosen_id}})
                     print(doc['giv_list'])
                     chosen_member = client.get_user(chosen_id)
                     chosen_members.append(chosen_member.mention)
