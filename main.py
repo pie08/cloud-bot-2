@@ -1554,7 +1554,7 @@ async def giveaway_check():
             if len(doc['giv_list']) == 0:
                 chosen_members = ['`Not enough entrants`']
             else:
-                if len(doc['give_list']) < winners:
+                if len(doc['giv_list']) < winners:
                     winners = len(doc['giv_list'])
                 chosen_members = []
                 for x in range(0, winners):
