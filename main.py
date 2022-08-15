@@ -1557,12 +1557,17 @@ async def giveaway_check():
                 if len(doc['giv_list']) < winners:
                     winners = len(doc['giv_list'])
                 chosen_members = []
+                used_ids = []
                 for x in range(0, winners):
-                    chosen_id = random.choice(doc['giv_list'])
-                    await collection.update_one({'_id': doc['_id']}, {'$pull': {'giv_list': chosen_id}})
-                    print(doc['giv_list'])
-                    chosen_member = client.get_user(chosen_id)
-                    chosen_members.append(chosen_member.mention)
+                    while True:
+                        chosen_id = random.choice(doc['giv_list'])
+                        if chosen_id not in used_ids:
+                            used_ids.append(chosen_id)
+                            chosen_member = client.get_user(chosen_id)
+                            chosen_members.append(chosen_member.mention)
+                        else:
+                            continue
+                        break
             chosen_members_des = ', '.join(chosen_members)
             em = nextcord.Embed(description=f'{entrants} entrants  ✅')
             if not entrants == 0:
