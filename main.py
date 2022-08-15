@@ -189,6 +189,9 @@ async def giveaway(ctx):
 
     try:
         win_int = int(winners.content)
+        if win_int == 0:
+            await ctx.send('The ammount fo winners must be positive!')
+            return
     except:
         await ctx.send('`The number of winners must only be a number!`')
         return
@@ -211,6 +214,7 @@ async def giveaway(ctx):
                 'channel_id': channel.id,
                 'prize': str(prize.content),
                 'host': ctx.author.id,
+                'winners': win_int,
                 'end_time': str(end_delta),
                 'emoji': '🎉',
                 'giv_list': [],
@@ -1543,22 +1547,29 @@ async def giveaway_check():
         msg = await channel.fetch_message(doc['_id'])
         prize = doc['prize']
         host = client.get_user(int(doc['host']))
+        winners = doc['winners']
+        for x in doc['giv_list']:
+            entrants += 1
         if end_time <= str(now):
             if len(doc['giv_list']) == 0:
-                winner = '`Not enough entrants`'
+                chosen_members = ['`Not enough entrants`']
             else:
-                chosen_id = random.choice(doc['giv_list'])
-                chosen_member = client.get_user(chosen_id)
-                winner = chosen_member.mention
-                for x in doc['giv_list']:
-                    entrants += 1
+                if len(doc['give_list']) < winners:
+                    winners = len(doc['giv_list'])
+                chosen_members = []
+                for x in range(0, winners):
+                    chosen_id = random.choice(doc['giv_list'])
+                    await collection.update_one({'guild_id': doc['guild_id']}, {'$pull': {'giv_list': chosen_id}})
+                    chosen_member = client.get_user(chosen_id)
+                    chosen_members.append(chosen_member.mention)
+            chosen_members_des = ', '.join(chosen_members)
             em = nextcord.Embed(description=f'{entrants} entrants  ✅')
             if not entrants == 0:
-                await channel.send(f'Congratulations {winner} you won the **{prize}**', embed=em)
+                await channel.send(f'Congratulations {chosen_members_des} you won the **{prize}**', embed=em)
             else:
-                await channel.send(f'{winner}, giveaway closed.', embed=em)
+                await channel.send(f'{chosen_members_des}, giveaway closed.', embed=em)
             em = nextcord.Embed(
-              title=f'{prize}', description=f'\nWinner : {winner} \nHost : {host.mention}', color=nextcord.Color.blue())
+              title=f'{prize}', description=f'\nWinner : {chosen_members_des} \nHost : {host.mention}', color=nextcord.Color.blue())
             em.timestamp = datetime.datetime.utcnow()
             await msg.edit(content='🎉 **GIVEAWAY ENDED** 🎉', embed=em)
             count = 0
