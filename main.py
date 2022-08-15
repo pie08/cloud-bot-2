@@ -189,7 +189,6 @@ async def giveaway(ctx):
 
     try:
         win_int = int(winners.content)
-        print(win_int)
     except:
         await ctx.send('`The number of winners must only be a number!`')
         return
@@ -198,7 +197,7 @@ async def giveaway(ctx):
     try:
         end_time = end_delta.strftime("%B %d, %Y %I:%M %p")
         em = nextcord.Embed(title=f'{str(prize.content)}',
-                            description=f'\nReact with 🎉 to enter \nEnds at : {end_time} \nHost : {ctx.author.mention}', color=nextcord.Color.blue())
+                            description=f'\nReact with 🎉 to enter \nEnds at : {end_time} \nHost : {ctx.author.mention} \nAmmount of winners: {win_int}', color=nextcord.Color.blue())
         channel = await client.fetch_channel(giv_channel.content[2:-1])
         msg = await channel.send('🎉 **GIVEAWAY** 🎉', embed=em)
         await msg.add_reaction('🎉')
