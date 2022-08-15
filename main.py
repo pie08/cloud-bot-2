@@ -154,7 +154,7 @@ async def giveaway(ctx):
     else:
         x = 'seconds'
         f = str(giv_time.content)
-    prize_ask = await ctx.send(f'Awesome, The giveaway will last {f} {x}! Finally, what do you want to give away? \n\n`Please enter the giveaway prize. This will also begin the giveaway.`')
+    prize_ask = await ctx.send(f'Awesome, The giveaway will last {f} {x}! Next, what do you want to give away? Alternatively you can say "cancel" to cancel the giveaway process')
     try:
         prize = await client.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
     except asyncio.TimeoutError:
@@ -177,6 +177,21 @@ async def giveaway(ctx):
     except:
         await ctx.send('Seems like there was a problem, you should make sure you didnt make any mistakes when creating your giveaway.')
         return
+
+    winners_ask = await ctx.send(f'Great, the prize will be for {str(prize_ask.content)}! Finally, how many winners do you want to have? `Please enter the ammount of winners. This will also begin the giveaway. Alternatively you can say "cancel" to cancel the giveaway process`')
+    try:
+        winners = await client.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
+    except asyncio.TimeoutError:
+        await winners_ask.edit(content='`Timed out! ⌛`')
+    if str(winners.content) == 'cancel':
+        await ctx.send('`Canceled!`')
+        return
+
+    if str(winners.content) == int:
+        await ctx.send('x')
+        return
+    
+    # Creating Giv
     try:
         end_time = end_delta.strftime("%B %d, %Y %I:%M %p")
         em = nextcord.Embed(title=f'{str(prize.content)}',
