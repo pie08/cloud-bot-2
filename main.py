@@ -477,7 +477,7 @@ async def ban(ctx, member: nextcord.Member, *, reason="No reason provided"):
 
 
 @client.command(name='softban', description='&Ban a member for a period of time')
-async def softban(ctx, member: nextcord.Member, time_input='1',  *, reason='No reason provided'):
+async def softban(ctx, member: nextcord.Member, time_input='1h',  *, reason='No reason provided'):
     if not ctx.author.guild_permissions.ban_members:
         await ctx.send('This command requires `ban_members` permission')
         return
